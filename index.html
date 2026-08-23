@@ -528,6 +528,70 @@ if ("serviceWorker" in navigator) {
   — Where Gaming Never Sleeps.
 
 </footer>
+<section id="game" style="text-align:center; padding:80px 20px;">
+  <h2>🎮 SleepyBlocks Clicker</h2>
+  <p style="color:#aaa; margin-bottom:25px;">Click the block and become the richest Sleepy 😴</p>
 
+  <div id="clickerGame" style="
+    max-width:500px;
+    margin:auto;
+    padding:35px 20px;
+    background:#171717;
+    border:2px solid #ffd400;
+    border-radius:20px;
+  ">
+    <h3 style="font-size:28px;">💰 Coins: <span id="coins">0</span></h3>
+
+    <button onclick="clickBlock()" style="
+      margin:25px 0;
+      font-size:70px;
+      background:none;
+      border:none;
+      cursor:pointer;
+    ">🧱</button>
+
+    <br>
+
+    <button onclick="upgrade()" class="button">
+      ⬆️ Upgrade — <span id="upgradeCost">50</span> Coins
+    </button>
+
+    <p style="margin-top:20px;color:#aaa;">
+      Coins per click: <span id="power">1</span>
+    </p>
+  </div>
+</section>
+
+<script>
+let coins = Number(localStorage.getItem("sleepyCoins")) || 0;
+let power = Number(localStorage.getItem("sleepyPower")) || 1;
+let upgradeCost = Number(localStorage.getItem("sleepyCost")) || 50;
+
+function updateGame() {
+  document.getElementById("coins").textContent = coins;
+  document.getElementById("power").textContent = power;
+  document.getElementById("upgradeCost").textContent = upgradeCost;
+
+  localStorage.setItem("sleepyCoins", coins);
+  localStorage.setItem("sleepyPower", power);
+  localStorage.setItem("sleepyCost", upgradeCost);
+}
+
+function clickBlock() {
+  coins += power;
+  updateGame();
+}
+
+function upgrade() {
+  if (coins >= upgradeCost) {
+    coins -= upgradeCost;
+    power++;
+    upgradeCost = Math.floor(upgradeCost * 1.7);
+    updateGame();
+  }
+}
+
+updateGame();
+</script>
 </body>
 </html>
