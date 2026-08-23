@@ -1,3 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SleepyBlocks</title>
+
+<style>
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background: #0d0d0d;
+  color: white;
+}
+
+nav {
+  background: #111;
+  padding: 18px 7%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 2px solid #ffd400;
+}
+
+.logo {
+  font-size: 25px;
+  font-weight: 900;
+  color: #ffd400;
+}
+
+nav a {
+  color: white;
+  text-decoration: none;
+  margin-left: 22px;
+  font-weight: bold;
+}
+
+nav a:hover {
+  color: #ffd400;
+}
+
+.hero {
+  min-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 40px 20px;
+  background: radial-gradient(circle, #292300, #0d0d0d 65%);
+}
+
+.hero h1 {
+  font-size: clamp(55px, 10vw, 110px);
+  color: #ffd400;
+}
+
+.hero p {
+  font-size: 20px;
+  margin: 15px 0 30px;
+  color: #ccc;
+}
+
+.button {
+  display: inline-block;
+  padding: 15px 28px;
+  background: #ffd400;
+  color: #111;
+  border-radius: 12px;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.button:hover {
+  transform: translateY(-3px);
+}
+
+section {
+  padding: 80px 8%;
+  text-align: center;
+}
+
+section h2 {
+  font-size: 40px;
+  margin-bottom: 35px;
+}
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px;
+  max-width: 1000px;
+  margin: auto;
+}
+
+.card {
+  background: #171717;
+  border: 1px solid #292929;
+  border-radius: 18px;
+  padding: 35px 20px;
+}
+
+.card:hover {
+  border-color: #ffd400;
+}
+
+.emoji {
+  font-size: 45px;
+  margin-bottom: 15px;
+}
+
+.card h3 {
+  font-size: 23px;
+  margin-bottom: 10px;
+}
+
+.card p {
+  color: #aaa;
+  margin-bottom: 20px;
+}
+
+footer {
+  text-align: center;
+  padding: 35px;
+  background: #111;
+  color: #777;
+}
+
+footer span {
+  color: #ffd400;
+}
+</style>
+</head>
+
 <body>
+
 <nav>
-<div class="logo">😴 SleepyBlocks</div>
+  <div class="logo">😴 SleepyBlocks</div>
+
+  <div>
+    <a href="#home">Home</a>
+    <a href="#shop">Shop</a>
+    <a href="#contact">Contact</a>
+  </div>
+</nav>
+
+<section class="hero" id="home">
+  <h1>SleepyBlocks</h1>
+  <p>Where Gaming Never Sleeps.</p>
+  <a class="button" href="#shop">Enter the Shop 🛒</a>
+</section>
+
+<section id="shop">
+  <h2>Shop 🛍️</h2>
+
+  <div class="cards">
+
+    <div class="card">
+      <div class="emoji">💸</div>
+      <h3>Robux</h3>
+      <p>Power up your game.</p>
+      <a class="button" href="#">Coming Soon</a>
+    </div>
+
+    <div class="card">
+      <div class="emoji">👕</div>
+      <h3>Merch</h3>
+      <p>Wear the Sleepy vibe.</p>
+      <a class="button" href="#">Coming Soon</a>
+    </div>
+
+    <div class="card">
+      <div class="emoji">🚀</div>
+      <h3>Coming Soon</h3>
+      <p>Big drops loading...</p>
+      <a class="button" href="#">Stay Tuned</a>
+    </div>
+
+    <div class="card">
+      <div class="emoji">✨</div>
+      <h3>More</h3>
+      <p>More goodies are coming.</p>
+      <a class="button" href="#">Soon</a>
+    </div>
+
+  </div>
+</section>
+
+<section id="contact">
+  <h2>Stay Connected 📱</h2>
+  <p style="color:#aaa; margin-bottom:25px;">
+    Follow SleepyBlocks for the latest updates and gaming content.
+  </p>
+
+  <a class="button" href="https://www.youtube.com/" target="_blank">
+    YouTube ▶️
+  </a>
+</section>
+
+<footer>
+  © 2026 <span>SleepyBlocks</span> — All Rights Reserved.
+</footer>
+
+</body>
+</html>
