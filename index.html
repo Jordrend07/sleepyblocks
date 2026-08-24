@@ -2,683 +2,1452 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>SleepyBlocks | Gaming Never Sleeps</title>
-
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>SleepyLabs</title>
 <style>
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  scroll-behavior: smooth;
+*{box-sizing:border-box}
+html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#10151c;color:#fff;font-family:Arial,Helvetica,sans-serif}
+canvas{display:block;width:100%;height:100%}
+
+.overlay{
+position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+background:rgba(5,8,12,.86);z-index:20
+}
+.card{
+width:min(720px,92vw);max-height:90vh;overflow:auto;background:#202936;
+border:2px solid #3c4858;border-radius:20px;padding:25px;
+box-shadow:0 20px 70px #0009;text-align:center
+}
+h1{font-size:48px;margin:0 0 8px}
+h2{margin:0 0 15px}
+.muted{color:#aeb9c8}
+
+button{
+border:0;border-radius:12px;padding:12px 18px;margin:6px;
+background:#ffd43b;color:#171717;font-weight:900;cursor:pointer;
+font-size:15px
+}
+button:hover{filter:brightness(1.08);transform:translateY(-1px)}
+button.dark{background:#303b4b;color:#fff}
+button.locked{background:#303640;color:#8994a2;cursor:not-allowed}
+
+.charGrid,.mapGrid,.modeGrid{
+display:grid;grid-template-columns:repeat(2,1fr);gap:10px
+}
+.charBtn,.mapBtn,.modeBtn{
+background:#2b3543;color:#fff;border:2px solid #414d5d;
+min-height:80px
+}
+.selected{border-color:#ffd43b!important}
+.price{display:block;margin-top:5px;color:#ffd43b}
+.locked .price{color:#ff7474}
+
+#hud{
+position:absolute;left:12px;right:12px;top:12px;
+display:flex;justify-content:space-between;z-index:8;pointer-events:none
+}
+.hudBox{
+background:#17202ddd;border:1px solid #465266;border-radius:12px;
+padding:10px 13px;box-shadow:0 5px 20px #0004
 }
 
-body {
-  font-family: Arial, Helvetica, sans-serif;
-  background: #080808;
-  color: white;
-  overflow-x: hidden;
+#tasks{
+position:absolute;right:12px;top:70px;width:250px;
+background:#17202dec;border:1px solid #465266;border-radius:14px;
+padding:13px;z-index:8
+}
+.task{font-size:13px;color:#c7d0db;margin:7px 0}
+.task.done{color:#75e66b;text-decoration:line-through}
+
+#chat{
+position:absolute;left:12px;bottom:55px;width:290px;z-index:9
+}
+#chatLog{
+height:130px;overflow:hidden;background:#111821cc;
+border:1px solid #465266;border-radius:12px;padding:8px;font-size:12px
+}
+.chatMsg{margin:4px 0}
+.chatName{font-weight:900}
+#chatInput{
+width:100%;margin-top:6px;border:1px solid #465266;
+border-radius:9px;background:#17202d;color:#fff;padding:9px;outline:none
 }
 
-/* NAVBAR */
-
-nav {
-  position: fixed;
-  top: 0;
-  width: 100%;
-  z-index: 100;
-  padding: 18px 7%;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background: rgba(8,8,8,0.85);
-  backdrop-filter: blur(12px);
-  border-bottom: 1px solid #292929;
+#controls{
+position:absolute;left:12px;bottom:12px;
+background:#17202ddd;border:1px solid #465266;border-radius:10px;
+padding:8px 10px;font-size:12px;color:#c4ceda;z-index:8
 }
-
-.logo {
-  color: #ffd400;
-  font-size: 25px;
-  font-weight: 900;
+#notice{
+position:absolute;left:50%;bottom:18px;transform:translateX(-50%);
+z-index:10;background:#17202dec;border:1px solid #465266;
+border-radius:12px;padding:10px 16px;display:none
 }
+.small{font-size:12px;color:#9da8b7;margin-top:10px}
 
-nav a {
-  color: white;
-  text-decoration: none;
-  margin-left: 25px;
-  font-weight: bold;
-  transition: .2s;
-}
-
-nav a:hover {
-  color: #ffd400;
-}
-
-/* HERO */
-
-.hero {
-  min-height: 100vh;
-  padding: 140px 20px 80px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-
-  background:
-    radial-gradient(circle at 50% 35%, #3b3200 0%, #151200 25%, #080808 65%);
-}
-
-.badge {
-  padding: 9px 18px;
-  border: 1px solid #ffd400;
-  border-radius: 50px;
-  color: #ffd400;
-  font-weight: bold;
-  margin-bottom: 25px;
-  animation: float 3s infinite ease-in-out;
-}
-
-.hero h1 {
-  font-size: clamp(60px, 12vw, 130px);
-  font-weight: 1000;
-  letter-spacing: -5px;
-  color: #ffd400;
-  text-shadow: 0 0 40px #ffd40035;
-}
-
-.hero p {
-  margin-top: 20px;
-  font-size: 21px;
-  color: #aaa;
-  max-width: 600px;
-}
-
-.buttons {
-  margin-top: 35px;
-  display: flex;
-  gap: 15px;
-  flex-wrap: wrap;
-  justify-content: center;
-}
-
-.button {
-  padding: 15px 27px;
-  border-radius: 12px;
-  background: #ffd400;
-  color: #080808;
-  text-decoration: none;
-  font-weight: 900;
-  transition: .25s;
-}
-
-.button:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 10px 35px #ffd40045;
-}
-
-.button.dark {
-  background: #181818;
-  color: white;
-  border: 1px solid #333;
-}
-
-.button.dark:hover {
-  border-color: #ffd400;
-}
-
-/* SECTIONS */
-
-section {
-  padding: 100px 8%;
-  text-align: center;
-}
-
-.section-title {
-  font-size: 45px;
-  margin-bottom: 12px;
-}
-
-.section-subtitle {
-  color: #888;
-  margin-bottom: 45px;
-}
-
-/* CARDS */
-
-.cards {
-  max-width: 1100px;
-  margin: auto;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
-  gap: 22px;
-}
-
-.card {
-  background: linear-gradient(145deg, #171717, #0f0f0f);
-  border: 1px solid #292929;
-  border-radius: 22px;
-  padding: 35px 25px;
-  transition: .3s;
-}
-
-.card:hover {
-  transform: translateY(-8px);
-  border-color: #ffd400;
-  box-shadow: 0 15px 40px #000;
-}
-
-.card-icon {
-  font-size: 50px;
-  margin-bottom: 18px;
-}
-
-.card h3 {
-  font-size: 24px;
-  margin-bottom: 10px;
-}
-
-.card p {
-  color: #999;
-  line-height: 1.5;
-  margin-bottom: 22px;
-}
-
-/* ABOUT */
-
-.about {
-  background: #0d0d0d;
-}
-
-.about-box {
-  max-width: 800px;
-  margin: auto;
-  padding: 45px;
-  border: 1px solid #292929;
-  border-radius: 25px;
-  background: #121212;
-}
-
-.about-box p {
-  color: #aaa;
-  font-size: 18px;
-  line-height: 1.7;
-}
-
-/* CONTACT */
-
-.contact {
-  background:
-    radial-gradient(circle at center, #292300, #080808 65%);
-}
-
-/* FOOTER */
-
-footer {
-  padding: 40px 20px;
-  text-align: center;
-  background: #050505;
-  color: #666;
-}
-
-footer strong {
-  color: #ffd400;
-}
-
-/* ANIMATION */
-
-@keyframes float {
-  0%,100% {
-    transform: translateY(0);
-  }
-
-  50% {
-    transform: translateY(-7px);
-  }
-}
-
-/* MOBILE */
-
-@media(max-width:700px) {
-
-  nav {
-    padding: 14px 18px;
-  }
-
-  .logo {
-    font-size: 20px;
-  }
-
-  nav a {
-    margin-left: 8px;
-    font-size: 13px;
-  }
-
-  .hero {
-    min-height: 90vh;
-    padding: 120px 20px 70px;
-  }
-
-  .hero h1 {
-    font-size: 58px;
-    line-height: 1;
-    letter-spacing: -2px;
-  }
-
-  .hero p {
-    font-size: 17px;
-    line-height: 1.5;
-  }
-
-  .button {
-    width: 100%;
-    max-width: 300px;
-    padding: 15px 20px;
-  }
-
-  section {
-    padding: 70px 20px;
-  }
-section {
-  padding: 70px 20px;
-}
-
-.cards {
-  grid-template-columns: repeat(2, 1fr);
-  gap: 10px;
-}
-
-.card {
-  padding: 18px 10px;
-  border-radius: 14px;
-}
-
-.emoji {
-  font-size: 30px;
-  margin-bottom: 8px;
-}
-
-.card h3 {
-  font-size: 17px;
-  margin-bottom: 6px;
-}
-
-.card p {
-  font-size: 12px;
-  margin-bottom: 12px;
-}
-  section h2 {
-    font-size: 32px;
-  }
-
-  .cards {
-    grid-template-columns: 1fr;
-    gap: 16px;
-  }
-
-  .card {
-    padding: 30px 20px;
-  }
-
-  .emoji {
-    font-size: 40px;
-  }
-
-  footer {
-    padding: 30px 20px;
-    font-size: 14px;
-  }
-
-} {
-
-  nav {
-    padding: 16px 5%;
-  }
-
-  nav a {
-    margin-left: 10px;
-    font-size: 14px;
-  }
-
-  .hero h1 {
-    letter-spacing: -3px;
-  }
-
-  section {
-    padding: 75px 6%;
-  }
-
-  .about-box {
-    padding: 30px 20px;
-  }
+@media(max-width:700px){
+h1{font-size:34px}
+.card{padding:16px}
+#tasks{width:205px}
+.hudBox{font-size:12px}
+#chat{width:220px}
 }
 </style>
-  <link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#ffd400">
 </head>
-<script>
-if ("serviceWorker" in navigator) {
-  navigator.serviceWorker.register("sw.js");
-}
-</script><!--  -->
+
 <body>
 
-<!-- NAVBAR -->
+<canvas id="game"></canvas>
 
-<nav>
+<div id="hud">
+<div class="hudBox">
+🧪 <b>SleepyLabs</b> · <span id="labTitle">Starter Lab</span>
+</div>
 
-  <div class="logo">
-    😴 SleepyBlocks
-  </div>
+<div class="hudBox">
+🪙 <b id="coinCount">0</b>/23
+</div>
+</div>
 
-  <div>
-  <a href="#home">Home</a>
-<a href="#shop">Shop</a>
-<a href="#about">About</a>
-<a href="#game">Game 🎮</a>
-  </div>
+<div id="tasks">
+<b>📋 TASKS</b>
+<div id="taskList"></div>
+<div id="buttonText" class="small">
+🔴 Find the hidden red button
+</div>
+</div>
 
-</nav>
+<div id="chat">
+<div id="chatLog">
+<div class="chatMsg">
+<span class="chatName">System:</span> Welcome to SleepyLabs!
+</div>
+</div>
 
+<input
+id="chatInput"
+placeholder="Press Enter to chat..."
+maxlength="80">
+</div>
 
-<!-- HERO -->
+<div id="controls">
+WASD / Arrow Keys · E = interact · Collect all 23 coins!
+</div>
 
-<section class="hero" id="home">
+<div id="notice"></div>
 
-  <div class="badge">
-    🎮 Welcome to SleepyBlocks
-  </div>
+<!-- MAIN MENU -->
 
-  <h1>SleepyBlocks</h1>
+<div class="overlay" id="mainMenu">
+<div class="card">
 
-  <p>
-    Gaming, entertainment and more.
-    <br>
-    <strong>Where Gaming Never Sleeps.</strong>
-  </p>
+<h1>🧪 SleepyLabs</h1>
 
-  <div class="buttons">
+<div class="muted">
+Minecraft × Roblox × Sandbox
+</div>
 
-    <a class="button" href="#shop">
-      Enter the Shop 🛒
-    </a>
+<p>
+Explore Labs, complete tasks, collect coins and find the hidden red button.
+</p>
 
-    <a class="button dark" href="#about">
-      Learn More
-    </a>
+<button onclick="openCharacters()">
+PLAY 🎮
+</button>
 
-  </div>
+</div>
+</div>
 
-</section>
+<!-- CHARACTER SELECT -->
 
+<div class="overlay" id="characters" style="display:none">
+<div class="card">
 
-<!-- SHOP -->
+<h2>🧍 Choose Your Character</h2>
 
-<section id="shop">
+<div class="charGrid" id="charGrid"></div>
 
-  <h2 class="section-title">
-    The Shop 🛍️
-  </h2>
+<button onclick="openModes()">
+CONTINUE ➜
+</button>
 
-  <p class="section-subtitle">
-    Gear up and rep SleepyBlocks.
-  </p>
+<div class="small">
+Alien is free. Collect coins to unlock the other characters.
+</div>
 
+</div>
+</div>
 
-  <div class="cards">
+<!-- MODE SELECT -->
 
-    <div class="card">
+<div class="overlay" id="modes" style="display:none">
+<div class="card">
 
-      <div class="card-icon">💸</div>
+<h2>🎮 Game Mode</h2>
 
-      <h3>Robux</h3>
+<div class="modeGrid">
 
-      <p>
-        Power up your Roblox adventures.
-      </p>
+<button class="modeBtn selected" onclick="selectMode('single',this)">
+🧍 Singleplayer
+<br>
+<span class="small">Play by yourself</span>
+</button>
 
-      <a class="button" href="#">
-        Coming Soon
-      </a>
-
-    </div>
-
-
-    <div class="card">
-
-      <div class="card-icon">👕</div>
-
-      <h3>Merch</h3>
-
-      <p>
-        Wear the Sleepy vibe wherever you go.
-      </p>
-
-      <a class="button" href="#">
-        Coming Soon
-      </a>
-
-    </div>
-
-
-   <div class="card">
-
-  <div class="card-icon">🎮</div>
-
-  <h3>SleepyBlocks Clicker</h3>
-
-  <p>
-    Click, earn coins and upgrade your power!
-  </p>
-
-  <a class="button" href="#game">
-    Play Game 🎮
-  </a>
+<button class="modeBtn" onclick="selectMode('multi',this)">
+👥 Multiplayer
+<br>
+<span class="small">Play with friends</span>
+</button>
 
 </div>
 
-  </div>
+<button onclick="openMaps()">
+CONTINUE ➜
+</button>
 
-</section>
+</div>
+</div>
 
+<!-- MAP SELECT -->
 
-<!-- ABOUT -->
+<div class="overlay" id="maps" style="display:none">
+<div class="card">
 
-<section class="about" id="about">
+<h2>🗺️ Choose Your Lab</h2>
 
-  <div class="about-box">
+<div class="mapGrid" id="mapGrid"></div>
 
-    <h2 class="section-title">
-      About SleepyBlocks 😴
-    </h2>
+<button onclick="startGame()">
+ENTER LAB 🚪
+</button>
 
-    <p>
-      Welcome to SleepyBlocks — a gaming brand built
-      for players, creators and everyone who loves gaming.
-      Stay tuned for new videos, projects, merch and more.
-    </p>
+</div>
+</div>
 
-  </div>
+<!-- WAITING SCREEN -->
 
-</section>
+<div class="overlay" id="waiting" style="display:none">
+<div class="card">
 
+<h2>👥 Waiting for Friends...</h2>
 
-<!-- CONTACT -->
+<p id="waitingText">
+Waiting for players to join.
+</p>
 
-<section class="contact" id="contact">
+<div style="font-size:55px">
+👽 🤖 🛠️ 😴
+</div>
 
-  <h2 class="section-title">
-    Stay Connected 🔥
-  </h2>
+<button onclick="startGame(true)">
+START GAME
+</button>
 
-  <p class="section-subtitle">
-    Follow SleepyBlocks and never miss an update.
-  </p>
+</div>
+</div>
 
-  <div class="buttons">
+<!-- GAME COMPLETE -->
 
-    <a
-      class="button"
-      href="https://www.youtube.com/"
-      target="_blank"
-    >
-      YouTube ▶️
-    </a>
+<div class="overlay" id="complete" style="display:none">
+<div class="card">
 
-  </div>
+<h1>🎉 LAB COMPLETE!</h1>
 
-</section>
+<p id="completeText">
+You completed the Lab!
+</p>
 
+<button onclick="nextLab()">
+NEXT LAB 🔓
+</button>
 
-<!-- FOOTER -->
+<button class="dark" onclick="returnToMaps()">
+MAPS 🗺️
+</button>
 
-<footer>
-
-  © 2026 <strong>SleepyBlocks</strong>
-  — Where Gaming Never Sleeps.
-
-</footer>
-<section id="game" style="text-align:center; padding:80px 20px;">
-
-  <h2>🎮 SleepyBlocks Clicker</h2>
-
-  <p style="color:#aaa; margin-bottom:25px;">
-    Click the block and become the richest Sleepy 😴
-  </p>
-
-  <div id="clickerGame" style="
-    max-width:500px;
-    margin:auto;
-    padding:35px 20px;
-    background:#171717;
-    border:2px solid #ffd400;
-    border-radius:20px;
-  ">
-
-    <h3 style="font-size:28px;">
-      💰 Coins: <span id="coins">0</span>
-    </h3>
-
-    <button onclick="clickBlock()" style="
-      margin:25px 0;
-      font-size:70px;
-      background:none;
-      border:none;
-      cursor:pointer;
-    ">🧱</button>
-
-    <br>
-
-    <button onclick="upgrade()" class="button">
-      ⬆️ Upgrade — <span id="upgradeCost">50</span> Coins
-    </button>
-
-    <p style="margin-top:20px;color:#aaa;">
-      Coins per click: <span id="power">1</span>
-    </p>
-
-    <button onclick="restartGame()" class="button" style="
-      margin-top:15px;
-      background:#222;
-      color:white;
-      border:1px solid #444;
-    ">
-      🔄 Restart Game
-    </button>
-
-  </div>
-
-</section>
+</div>
+</div>
 
 <script>
 
-let coins = Number(localStorage.getItem("sleepyCoins")) || 0;
-let power = Number(localStorage.getItem("sleepyPower")) || 1;
-let upgradeCost = Number(localStorage.getItem("sleepyCost")) || 50;
+const canvas=document.getElementById("game");
+const ctx=canvas.getContext("2d");
 
-function updateGame() {
+let W=innerWidth;
+let H=innerHeight;
 
-  document.getElementById("coins").textContent = coins;
-  document.getElementById("power").textContent = power;
-  document.getElementById("upgradeCost").textContent = upgradeCost;
+function resize(){
+W=innerWidth;
+H=innerHeight;
+canvas.width=W;
+canvas.height=H;
+}
 
-  localStorage.setItem("sleepyCoins", coins);
-  localStorage.setItem("sleepyPower", power);
-  localStorage.setItem("sleepyCost", upgradeCost);
+addEventListener("resize",resize);
+resize();
+
+
+// -----------------------------
+// GAME DATA
+// -----------------------------
+
+const characters=[
+{
+name:"Alien",
+icon:"👽",
+cost:0,
+color:"#70e000"
+},
+{
+name:"LabBot",
+icon:"🤖",
+cost:5,
+color:"#8aa0b8"
+},
+{
+name:"Builder",
+icon:"🛠️",
+cost:10,
+color:"#f2a900"
+},
+{
+name:"SleepyBlocks",
+icon:"😴",
+cost:20,
+color:"#ffd43b"
+}
+];
+
+const labs=[
+{
+name:"Starter Lab",
+difficulty:"Easy",
+color:"#50b86c"
+},
+{
+name:"Tech Lab",
+difficulty:"Medium",
+color:"#4e9be8"
+},
+{
+name:"Advanced Lab",
+difficulty:"Hard",
+color:"#9b63e8"
+},
+{
+name:"Chaos Lab",
+difficulty:"Very Hard",
+color:"#e34b4b"
+},
+{
+name:"Secret Lab",
+difficulty:"SECRET",
+color:"#252525"
+}
+];
+
+let selectedCharacter=characters[0];
+let selectedMode="single";
+let selectedLab=0;
+
+let coins=0;
+let collectedCoins=0;
+
+let gameRunning=false;
+let gameFinished=false;
+
+let player={
+x:450,
+y:300,
+size:25,
+speed:3.2
+};
+
+let camera={
+x:0,
+y:0
+};
+
+let keys={};
+
+let buttonPressed=false;
+
+let taskObjects=[];
+
+
+// -----------------------------
+// MAP
+// -----------------------------
+
+const WORLD_W=1800;
+const WORLD_H=1100;
+
+let walls=[
+{x:0,y:0,w:1800,h:35},
+{x:0,y:1065,w:1800,h:35},
+{x:0,y:0,w:35,h:1100},
+{x:1765,y:0,w:35,h:1100},
+
+{x:320,y:35,w:35,h:280},
+{x:320,y:470,w:35,h:595},
+
+{x:720,y:35,w:35,h:210},
+{x:720,y:400,w:35,h:665},
+
+{x:1120,y:35,w:35,h:300},
+{x:1120,y:500,w:35,h:565},
+
+{x:35,y:300,w:285,h:35},
+{x:355,y:300,w:330,h:35},
+{x:755,y:300,w:330,h:35},
+{x:1155,y:300,w:610,h:35},
+
+{x:35,y:700,w:230,h:35},
+{x:300,y:700,w:340,h:35},
+{x:675,y:700,w:300,h:35},
+{x:1010,y:700,w:755,h:35},
+
+{x:530,y:300,w:35,h:150},
+{x:900,y:35,w:35,h:150},
+{x:1370,y:300,w:35,h:220},
+{x:1370,y:700,w:35,h:365}
+];
+
+
+// -----------------------------
+// COINS
+// Exactly 23 per Lab
+// -----------------------------
+
+const coinPositions=[
+{x:120,y:130},
+{x:220,y:210},
+{x:470,y:125},
+{x:620,y:190},
+{x:820,y:120},
+{x:1030,y:210},
+{x:1240,y:130},
+{x:1510,y:180},
+{x:1640,y:250},
+
+{x:120,y:480},
+{x:220,y:610},
+{x:450,y:560},
+{x:610,y:630},
+{x:800,y:520},
+{x:960,y:600},
+{x:1220,y:570},
+{x:1500,y:610},
+
+{x:130,y:870},
+{x:430,y:850},
+{x:610,y:960},
+{x:830,y:850},
+{x:1260,y:900},
+{x:1580,y:850}
+];
+
+let coinsOnMap=[];
+
+
+// -----------------------------
+// TASKS
+// -----------------------------
+
+const taskTemplates=[
+"Fix the Generator",
+"Activate the Computer",
+"Repair the Pipes",
+"Collect 3 Batteries"
+];
+
+function createTasks(){
+
+taskObjects=[
+{
+name:"Fix the Generator",
+x:180,
+y:140,
+done:false
+},
+{
+name:"Activate the Computer",
+x:840,
+y:145,
+done:false
+},
+{
+name:"Repair the Pipes",
+x:1480,
+y:470,
+done:false
+},
+{
+name:"Collect 3 Batteries",
+x:820,
+y:850,
+done:false
+}
+];
+
+updateTasks();
+}
+
+
+// -----------------------------
+// UI
+// -----------------------------
+
+function hideAll(){
+
+[
+"mainMenu",
+"characters",
+"modes",
+"maps",
+"waiting",
+"complete"
+].forEach(id=>{
+document.getElementById(id).style.display="none";
+});
 
 }
 
-function clickBlock() {
+function openCharacters(){
 
-  coins += power;
-  updateGame();
+hideAll();
 
-}
+document.getElementById("characters").style.display="flex";
 
-function upgrade() {
-
-  if (coins >= upgradeCost) {
-
-    coins -= upgradeCost;
-    power++;
-
-    upgradeCost = Math.floor(upgradeCost * 1.7);
-
-    updateGame();
-
-  }
+renderCharacters();
 
 }
 
-function restartGame() {
+function renderCharacters(){
 
-  if (confirm("Are you sure you want to restart?")) {
+const grid=document.getElementById("charGrid");
 
-    coins = 0;
-    power = 1;
-    upgradeCost = 50;
+grid.innerHTML="";
 
-    updateGame();
+characters.forEach(character=>{
 
-  }
+const button=document.createElement("button");
+
+button.className="charBtn";
+
+if(character===selectedCharacter)
+button.classList.add("selected");
+
+let owned=character.cost===0 || coins>=character.cost;
+
+if(!owned)
+button.classList.add("locked");
+
+button.innerHTML=
+`
+<div style="font-size:28px">
+${character.icon}
+</div>
+<b>${character.name}</b>
+<span class="price">
+${character.cost===0?"FREE":"🪙 "+character.cost}
+</span>
+`;
+
+button.onclick=()=>{
+
+if(character.cost>coins){
+
+showNotice(
+`You need ${character.cost-coins} more coins to unlock ${character.name}.`
+);
+
+return;
 
 }
 
-updateGame();
+selectedCharacter=character;
+
+renderCharacters();
+
+};
+
+grid.appendChild(button);
+
+});
+
+}
+
+
+function openModes(){
+
+hideAll();
+
+document.getElementById("modes").style.display="flex";
+
+}
+
+
+function selectMode(mode,button){
+
+selectedMode=mode;
+
+document
+.querySelectorAll(".modeBtn")
+.forEach(x=>x.classList.remove("selected"));
+
+button.classList.add("selected");
+
+}
+
+
+function openMaps(){
+
+hideAll();
+
+document.getElementById("maps").style.display="flex";
+
+renderMaps();
+
+}
+
+
+function renderMaps(){
+
+const grid=document.getElementById("mapGrid");
+
+grid.innerHTML="";
+
+labs.forEach((lab,index)=>{
+
+const button=document.createElement("button");
+
+button.className="mapBtn";
+
+let unlocked=index===0 || index<=selectedLab;
+
+if(!unlocked){
+
+button.classList.add("locked");
+
+button.innerHTML=
+`
+🧪 ${lab.name}
+<br>
+<span class="price">🔒 Complete previous Lab</span>
+`;
+
+button.onclick=()=>showNotice("Complete the previous Lab first.");
+
+}else{
+
+button.innerHTML=
+`
+🧪 ${lab.name}
+<br>
+<span class="small">${lab.difficulty}</span>
+`;
+
+if(index===selectedLab)
+button.classList.add("selected");
+
+button.onclick=()=>{
+
+selectedLab=index;
+
+renderMaps();
+
+};
+
+}
+
+grid.appendChild(button);
+
+});
+
+}
+
+
+// -----------------------------
+// GAME START
+// -----------------------------
+
+function startGame(){
+
+hideAll();
+
+if(selectedMode==="multi"){
+
+document.getElementById("waiting").style.display="flex";
+
+document.getElementById("waitingText").textContent=
+"Waiting for friends to join...";
+
+setTimeout(()=>{
+
+document.getElementById("waitingText").textContent=
+"Players ready!";
+
+},1800);
+
+}else{
+
+beginGame();
+
+}
+
+}
+
+function beginGame(){
+
+hideAll();
+
+gameRunning=true;
+gameFinished=false;
+buttonPressed=false;
+
+collectedCoins=0;
+
+player.x=100;
+player.y=130;
+
+coinsOnMap=coinPositions.map((coin,index)=>({
+
+x:coin.x,
+y:coin.y,
+collected:false,
+id:index
+
+}));
+
+createTasks();
+
+document.getElementById("labTitle").textContent=labs[selectedLab].name;
+
+showNotice(
+`Welcome to ${labs[selectedLab].name}! Find tasks, coins and the red button.`
+);
+
+}
+
+
+function startMultiplayer(){
+
+beginGame();
+
+}
+
+
+// -----------------------------
+// TASK SYSTEM
+// -----------------------------
+
+function updateTasks(){
+
+const list=document.getElementById("taskList");
+
+list.innerHTML="";
+
+taskObjects.forEach(task=>{
+
+const div=document.createElement("div");
+
+div.className="task"+(task.done?" done":"");
+
+div.textContent=(task.done?"☑ ":"☐ ")+task.name;
+
+list.appendChild(div);
+
+});
+
+}
+
+
+function interact(){
+
+if(!gameRunning)
+return;
+
+
+// Task interaction
+
+for(const task of taskObjects){
+
+if(task.done)
+continue;
+
+let distance=Math.hypot(
+player.x-task.x,
+player.y-task.y
+);
+
+if(distance<65){
+
+task.done=true;
+
+updateTasks();
+
+showNotice("Task completed! ✅");
+
+checkFinish();
+
+return;
+
+}
+
+}
+
+
+// Red button
+
+const buttonX=1570;
+const buttonY=940;
+
+let distance=Math.hypot(
+player.x-buttonX,
+player.y-buttonY
+);
+
+if(distance<70){
+
+if(!buttonPressed){
+
+buttonPressed=true;
+
+document.getElementById("buttonText").textContent=
+"🟢 Red button pressed!";
+
+showNotice("Red button activated! 🔴➡️🟢");
+
+checkFinish();
+
+}
+
+return;
+
+}
+
+}
+
+
+// -----------------------------
+// FINISH CHECK
+// -----------------------------
+
+function checkFinish(){
+
+let allTasks=taskObjects.every(task=>task.done);
+
+if(
+allTasks &&
+buttonPressed &&
+collectedCoins===23
+){
+
+finishGame();
+
+}
+
+}
+
+
+function finishGame(){
+
+gameRunning=false;
+gameFinished=true;
+
+coins+=5;
+
+document.getElementById("completeText").textContent=
+`
+${labs[selectedLab].name} completed!
+You collected all 23 coins and earned +5 bonus coins.
+`;
+
+document.getElementById("complete").style.display="flex";
+
+}
+
+
+// -----------------------------
+// NEXT LAB
+// -----------------------------
+
+function nextLab(){
+
+if(selectedLab<labs.length-1){
+
+selectedLab++;
+
+hideAll();
+
+document.getElementById("maps").style.display="flex";
+
+renderMaps();
+
+}else{
+
+showNotice("You discovered every Lab! 👀");
+
+returnToMaps();
+
+}
+
+}
+
+
+function returnToMaps(){
+
+hideAll();
+
+document.getElementById("maps").style.display="flex";
+
+renderMaps();
+
+}
+
+
+// -----------------------------
+// COINS
+// -----------------------------
+
+function collectCoins(){
+
+for(const coin of coinsOnMap){
+
+if(coin.collected)
+continue;
+
+let distance=Math.hypot(
+player.x-coin.x,
+player.y-coin.y
+);
+
+if(distance<28){
+
+coin.collected=true;
+
+collectedCoins++;
+
+document.getElementById("coinCount").textContent=
+collectedCoins;
+
+showNotice(`🪙 Coin collected! ${collectedCoins}/23`);
+
+if(collectedCoins===23){
+
+showNotice(
+"🪙 ALL 23 COINS COLLECTED!"
+);
+
+}
+
+}
+
+}
+
+}
+
+
+// -----------------------------
+// PLAYER MOVEMENT
+// -----------------------------
+
+addEventListener("keydown",event=>{
+
+keys[event.key.toLowerCase()]=true;
+
+if(
+event.key.toLowerCase()==="e"
+){
+
+interact();
+
+}
+
+});
+
+addEventListener("keyup",event=>{
+
+keys[event.key.toLowerCase()]=false;
+
+});
+
+
+// -----------------------------
+// CHAT
+// -----------------------------
+
+const chatInput=document.getElementById("chatInput");
+
+chatInput.addEventListener("keydown",event=>{
+
+if(event.key!=="Enter")
+return;
+
+let text=chatInput.value.trim();
+
+if(!text)
+return;
+
+const log=document.getElementById("chatLog");
+
+const message=document.createElement("div");
+
+message.className="chatMsg";
+
+message.innerHTML=
+`
+<span class="chatName">
+${escapeHTML(selectedCharacter.name)}:
+</span>
+${escapeHTML(text)}
+`;
+
+log.appendChild(message);
+
+log.scrollTop=log.scrollHeight;
+
+chatInput.value="";
+
+});
+
+
+function escapeHTML(text){
+
+return text
+.replaceAll("&","&amp;")
+.replaceAll("<","&lt;")
+.replaceAll(">","&gt;")
+.replaceAll('"',"&quot;");
+
+}
+
+
+// -----------------------------
+// COLLISION
+// -----------------------------
+
+function collides(x,y){
+
+const half=player.size/2;
+
+for(const wall of walls){
+
+if(
+x+half>wall.x &&
+x-half<wall.x+wall.w &&
+y+half>wall.y &&
+y-half<wall.y+wall.h
+){
+
+return true;
+
+}
+
+}
+
+return false;
+
+}
+
+
+function movePlayer(){
+
+if(!gameRunning)
+return;
+
+let dx=0;
+let dy=0;
+
+if(keys["w"]||keys["arrowup"])
+dy-=1;
+
+if(keys["s"]||keys["arrowdown"])
+dy+=1;
+
+if(keys["a"]||keys["arrowleft"])
+dx-=1;
+
+if(keys["d"]||keys["arrowright"])
+dx+=1;
+
+if(dx!==0&&dy!==0){
+
+dx*=0.707;
+dy*=0.707;
+
+}
+
+let nx=player.x+dx*player.speed;
+let ny=player.y+dy*player.speed;
+
+if(!collides(nx,player.y))
+player.x=nx;
+
+if(!collides(player.x,ny))
+player.y=ny;
+
+}
+
+
+// -----------------------------
+// DRAWING
+// -----------------------------
+
+function draw(){
+
+ctx.clearRect(0,0,W,H);
+
+ctx.save();
+
+camera.x=player.x-W/2;
+camera.y=player.y-H/2;
+
+camera.x=Math.max(0,Math.min(camera.x,WORLD_W-W));
+camera.y=Math.max(0,Math.min(camera.y,WORLD_H-H));
+
+ctx.translate(-camera.x,-camera.y);
+
+drawFloor();
+drawWalls();
+drawDecorations();
+drawCoins();
+drawTasks();
+drawRedButton();
+drawPlayer();
+
+ctx.restore();
+
+}
+
+
+// FLOOR
+
+function drawFloor(){
+
+ctx.fillStyle="#29333d";
+
+ctx.fillRect(
+0,
+0,
+WORLD_W,
+WORLD_H
+);
+
+const size=50;
+
+ctx.strokeStyle="#33404c";
+ctx.lineWidth=1;
+
+for(let x=0;x<WORLD_W;x+=size){
+
+ctx.beginPath();
+ctx.moveTo(x,0);
+ctx.lineTo(x,WORLD_H);
+ctx.stroke();
+
+}
+
+for(let y=0;y<WORLD_H;y+=size){
+
+ctx.beginPath();
+ctx.moveTo(0,y);
+ctx.lineTo(WORLD_W,y);
+ctx.stroke();
+
+}
+
+}
+
+
+// WALLS
+
+function drawWalls(){
+
+walls.forEach(wall=>{
+
+ctx.fillStyle="#56616d";
+
+ctx.fillRect(
+wall.x,
+wall.y,
+wall.w,
+wall.h
+);
+
+ctx.strokeStyle="#727f8c";
+
+ctx.strokeRect(
+wall.x,
+wall.y,
+wall.w,
+wall.h
+);
+
+});
+
+}
+
+
+// DECORATIONS
+
+function drawDecorations(){
+
+// Lab tables
+
+const tables=[
+{x:80,y:90,w:110,h:45},
+{x:420,y:90,w:130,h:45},
+{x:800,y:90,w:120,h:45},
+{x:1240,y:90,w:130,h:45},
+{x:420,y:520,w:140,h:45},
+{x:750,y:820,w:130,h:45},
+{x:1210,y:820,w:150,h:45},
+{x:1480,y:430,w:130,h:45}
+];
+
+tables.forEach(t=>{
+
+ctx.fillStyle="#384451";
+ctx.fillRect(t.x,t.y,t.w,t.h);
+
+ctx.fillStyle="#657482";
+ctx.fillRect(
+t.x+8,
+t.y+8,
+t.w-16,
+10
+);
+
+});
+
+
+// Floor lights
+
+for(let x=100;x<1750;x+=200){
+
+ctx.fillStyle="#3c4651";
+
+ctx.fillRect(
+x,
+50,
+70,
+12
+);
+
+}
+
+}
+
+
+// COINS
+
+function drawCoins(){
+
+coinsOnMap.forEach(coin=>{
+
+if(coin.collected)
+return;
+
+ctx.save();
+
+ctx.translate(coin.x,coin.y);
+
+ctx.fillStyle="#ffd43b";
+
+ctx.beginPath();
+ctx.arc(0,0,11,0,Math.PI*2);
+ctx.fill();
+
+ctx.fillStyle="#fff1a6";
+
+ctx.beginPath();
+ctx.arc(-3,-3,4,0,Math.PI*2);
+ctx.fill();
+
+ctx.strokeStyle="#d9a900";
+ctx.lineWidth=2;
+ctx.stroke();
+
+ctx.restore();
+
+});
+
+}
+
+
+// TASK OBJECTS
+
+function drawTasks(){
+
+taskObjects.forEach(task=>{
+
+ctx.save();
+
+ctx.translate(task.x,task.y);
+
+ctx.fillStyle=task.done?"#62d96b":"#4e9be8";
+
+ctx.fillRect(-18,-18,36,36);
+
+ctx.fillStyle="#fff";
+
+ctx.font="bold 16px Arial";
+
+ctx.textAlign="center";
+ctx.textBaseline="middle";
+
+ctx.fillText(
+task.done?"✓":"!",
+0,
+1
+);
+
+ctx.restore();
+
+});
+
+}
+
+
+// RED BUTTON
+
+function drawRedButton(){
+
+const x=1570;
+const y=940;
+
+ctx.save();
+
+ctx.translate(x,y);
+
+ctx.fillStyle="#20252c";
+ctx.fillRect(-35,18,70,12);
+
+ctx.fillStyle=buttonPressed?"#56d36b":"#e53935";
+
+ctx.beginPath();
+
+ctx.arc(0,0,25,0,Math.PI*2);
+
+ctx.fill();
+
+ctx.strokeStyle="#111";
+
+ctx.lineWidth=4;
+
+ctx.stroke();
+
+ctx.fillStyle="#fff";
+
+ctx.font="bold 10px Arial";
+
+ctx.textAlign="center";
+
+ctx.fillText(
+buttonPressed?"GO!":"PRESS",
+0,
+4
+);
+
+ctx.restore();
+
+}
+
+
+// PLAYER
+
+function drawPlayer(){
+
+ctx.save();
+
+ctx.translate(player.x,player.y);
+
+ctx.fillStyle=selectedCharacter.color;
+
+ctx.fillRect(
+-player.size/2,
+-player.size/2,
+player.size,
+player.size
+);
+
+ctx.strokeStyle="#fff";
+ctx.lineWidth=2;
+
+ctx.strokeRect(
+-player.size/2,
+-player.size/2,
+player.size,
+player.size
+);
+
+ctx.font="18px Arial";
+ctx.textAlign="center";
+
+ctx.fillText(
+selectedCharacter.icon,
+0,
+-18
+);
+
+ctx.restore();
+
+}
+
+
+// -----------------------------
+// NOTICE
+// -----------------------------
+
+let noticeTimer;
+
+function showNotice(text){
+
+const notice=document.getElementById("notice");
+
+notice.textContent=text;
+
+notice.style.display="block";
+
+clearTimeout(noticeTimer);
+
+noticeTimer=setTimeout(()=>{
+
+notice.style.display="none";
+
+},2500);
+
+}
+
+
+// -----------------------------
+// GAME LOOP
+// -----------------------------
+
+function loop(){
+
+movePlayer();
+
+collectCoins();
+
+draw();
+
+requestAnimationFrame(loop);
+
+}
+
+loop();
+
+
+// -----------------------------
+// STARTER UI
+// -----------------------------
+
+renderCharacters();
 
 </script>
 
-<script>
-let coins = Number(localStorage.getItem("sleepyCoins")) || 0;
-let power = Number(localStorage.getItem("sleepyPower")) || 1;
-let upgradeCost = Number(localStorage.getItem("sleepyCost")) || 50;
-
-function updateGame() {
-  document.getElementById("coins").textContent = coins;
-  document.getElementById("power").textContent = power;
-  document.getElementById("upgradeCost").textContent = upgradeCost;
-
-  localStorage.setItem("sleepyCoins", coins);
-  localStorage.setItem("sleepyPower", power);
-  localStorage.setItem("sleepyCost", upgradeCost);
-}
-
-function clickBlock() {
-  coins += power;
-  updateGame();
-}
-
-function upgrade() {
-  if (coins >= upgradeCost) {
-    coins -= upgradeCost;
-    power++;
-    upgradeCost = Math.floor(upgradeCost * 1.7);
-    updateGame();
-  }
-}
-
-updateGame();
-</script>
 </body>
 </html>
