@@ -1,638 +1,2511 @@
-<script>
-const canvas = document.getElementById("game");
-const ctx = canvas.getContext("2d");
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no">
+<title>SleepyLabs Obby</title>
 
-let W = innerWidth;
-let H = innerHeight;
-
-function resize() {
-    W = innerWidth;
-    H = innerHeight;
-    canvas.width = W;
-    canvas.height = H;
+<style>
+*{box-sizing:border-box;user-select:none;-webkit-user-select:none}
+html,body{
+margin:0;width:100%;height:100%;overflow:hidden;
+font-family:Arial,sans-serif;background:#071114;color:white;
 }
-addEventListener("resize", resize);
-resize();
+button{font-family:inherit;cursor:pointer}
 
-/* =========================
-   PLAYER
-========================= */
+/* ================= MOBILE ================= */
 
-const player = {
-    x: 450,
-    y: 400,
-    speed: 3.5,
-    width: 34,
-    height: 58,
-    walk: 0
-};
+#mobileRotate{
+display:none;
+position:fixed;
+inset:0;
+z-index:999999;
+background:#071114;
+align-items:center;
+justify-content:center;
+text-align:center;
+padding:25px;
+}
 
-const keys = {};
+.rotateBox{
+max-width:420px;
+padding:30px;
+border:2px solid #ffd400;
+border-radius:22px;
+background:#152328;
+}
 
-/* =========================
-   MEETING ROOM
-========================= */
+.rotateIcon{
+font-size:65px;
+margin-bottom:15px;
+}
 
-const room = {
-    x: 0,
-    y: 0,
-    width: 1400,
-    height: 850
-};
+.rotateBox h1{
+color:#ffd400;
+margin:5px;
+}
 
-const walls = [
-    {x:0,y:0,w:1400,h:30},
-    {x:0,y:820,w:1400,h:30},
-    {x:0,y:0,w:30,h:850},
-    {x:1370,y:0,w:30,h:850}
+.rotateBox p{
+color:#b9c5c8;
+}
+
+#mobileControls{
+display:none;
+position:fixed;
+left:0;
+right:0;
+bottom:15px;
+z-index:9000;
+pointer-events:none;
+}
+
+.mobileLeft{
+position:absolute;
+left:20px;
+bottom:0;
+display:flex;
+gap:10px;
+}
+
+.mobileRight{
+position:absolute;
+right:20px;
+bottom:0;
+}
+
+.mobileBtn{
+width:65px;
+height:65px;
+border:2px solid rgba(255,212,0,.8);
+border-radius:16px;
+background:rgba(17,29,33,.85);
+color:#fff;
+font-size:27px;
+font-weight:900;
+pointer-events:auto;
+touch-action:none;
+}
+
+.mobileBtn:active{
+background:#ffd400;
+color:#111;
+}
+
+.mobileJump{
+width:85px;
+height:85px;
+border-radius:50%;
+}
+
+/* ================= PC ================= */
+
+#pcError{
+position:fixed;
+inset:0;
+z-index:99999;
+display:none;
+align-items:center;
+justify-content:center;
+background:radial-gradient(circle,#183c42,#061014 70%);
+text-align:center;
+padding:25px
+}
+
+.pcBox{
+width:90%;
+max-width:520px;
+padding:35px;
+border:2px solid #ffd400;
+border-radius:22px;
+background:#152328;
+box-shadow:0 20px 70px #000
+}
+
+.pcBox h1{
+color:#ffd400;
+font-size:34px;
+margin:5px
+}
+
+.pcBox p{
+color:#c7d0d2
+}
+
+.fullBtn{
+border:0;
+border-radius:11px;
+padding:14px 25px;
+background:#ffd400;
+font-weight:900;
+font-size:17px;
+margin-top:10px
+}
+
+#mainMenu{
+position:fixed;
+inset:0;
+z-index:10000;
+display:flex;
+align-items:center;
+justify-content:center;
+background:radial-gradient(circle at 50% 35%,#1c4b52,#0b1c21 55%,#04090b);
+text-align:center
+}
+
+.menuBox{
+width:90%;
+max-width:650px;
+padding:40px 25px;
+border:2px solid #ffd400;
+border-radius:25px;
+background:rgba(18,35,40,.95);
+box-shadow:0 20px 80px #000
+}
+
+.menuLogo{
+font-size:58px;
+font-weight:1000;
+color:#ffd400
+}
+
+.menuSub{
+font-size:18px;
+color:#aebabc;
+margin:10px 0 25px
+}
+
+.menuCoins{
+display:inline-block;
+padding:10px 18px;
+border-radius:10px;
+background:#0b1417;
+border:1px solid #34474c;
+font-weight:900;
+margin-bottom:25px
+}
+
+.playButton{
+display:block;
+width:100%;
+max-width:420px;
+margin:auto;
+padding:20px;
+border:0;
+border-radius:15px;
+background:#ffd400;
+color:#111;
+font-size:25px;
+font-weight:1000
+}
+
+.socials{
+display:flex;
+justify-content:center;
+gap:10px;
+margin-top:20px;
+flex-wrap:wrap
+}
+
+.social{
+border:0;
+border-radius:10px;
+padding:11px 17px;
+font-weight:900;
+background:#202f34;
+color:white
+}
+
+.credit{
+margin-top:25px;
+color:#7f9297;
+font-size:13px;
+font-weight:900
+}
+
+#topbar{
+height:64px;
+width:100%;
+display:none;
+align-items:center;
+justify-content:space-between;
+padding:0 18px;
+background:#111d21;
+border-bottom:2px solid #ffd400;
+position:fixed;
+top:0;
+left:0;
+z-index:5000
+}
+
+.logo{
+font-size:21px;
+font-weight:900;
+color:#ffd400
+}
+
+.stats{
+display:flex;
+align-items:center;
+gap:8px;
+font-weight:900
+}
+
+.topBtn{
+border:0;
+border-radius:9px;
+padding:9px 13px;
+background:#ffd400;
+color:#111;
+font-weight:900
+}
+
+#game{
+position:absolute;
+left:0;
+top:64px;
+width:100%;
+height:calc(100vh - 64px);
+overflow:hidden;
+background:radial-gradient(circle at 50% 20%,#1c3d43,#0b191e 55%,#050b0d);
+display:none
+}
+
+#world{
+position:absolute;
+left:0;
+top:0;
+width:3000px;
+height:1500px
+}
+
+.light{
+position:absolute;
+height:7px;
+width:150px;
+border-radius:20px;
+background:#dfffff;
+box-shadow:0 0 22px #bfffff;
+opacity:.65
+}
+
+.machine{
+position:absolute;
+width:70px;
+height:90px;
+border:2px solid #40575d;
+border-radius:12px;
+background:#17282d
+}
+
+.machine:before{
+content:"";
+position:absolute;
+width:18px;
+height:18px;
+border-radius:50%;
+background:#35e6b5;
+box-shadow:0 0 18px #35e6b5;
+left:24px;
+top:15px
+}
+
+.machine:after{
+content:"";
+position:absolute;
+height:7px;
+left:12px;
+right:12px;
+bottom:14px;
+border-radius:5px;
+background:#354a50
+}
+
+.labText{
+position:absolute;
+color:#ffd400;
+font-size:18px;
+font-weight:900;
+opacity:.5
+}
+
+.platform{
+position:absolute;
+height:28px;
+border-radius:8px;
+background:linear-gradient(#ffe044,#bd9600);
+border:2px solid #fff1a0;
+box-shadow:0 5px 0 #695500,0 0 16px rgba(255,212,0,.25);
+z-index:100
+}
+
+.platform:after{
+content:"";
+position:absolute;
+left:10px;
+right:10px;
+bottom:5px;
+height:3px;
+background:rgba(255,255,255,.2);
+border-radius:5px
+}
+
+.finish{
+position:absolute;
+z-index:500;
+width:360px;
+height:130px;
+text-align:center
+}
+
+.finishText{
+font-size:40px;
+font-weight:1000;
+color:#20ff70;
+text-shadow:0 0 20px #20ff70;
+margin-bottom:12px;
+white-space:nowrap
+}
+
+.finishPlatform{
+height:32px;
+width:360px;
+border-radius:10px;
+background:linear-gradient(#20ff70,#079b42);
+border:3px solid #b7ffd0;
+box-shadow:0 0 30px #20ff70,0 7px 0 #075e2c
+}
+
+#lava{
+position:absolute;
+left:0;
+bottom:0;
+width:3000px;
+height:55px;
+background:
+radial-gradient(ellipse at 20% 40%,#ffd000 0 8%,transparent 9%),
+radial-gradient(ellipse at 55% 65%,#ff8a00 0 10%,transparent 11%),
+radial-gradient(ellipse at 80% 35%,#ffd000 0 7%,transparent 8%),
+linear-gradient(180deg,#ffb000,#ff4b00 45%,#d90000);
+background-size:180px 70px,240px 80px,210px 65px,100% 100%;
+box-shadow:0 -8px 25px #ff3b00,inset 0 8px 15px rgba(255,220,0,.45);
+animation:lavaFlow 1.1s linear infinite;
+z-index:20
+}
+
+@keyframes lavaFlow{
+0%{background-position:0 0,0 0,0 0,0 0}
+100%{background-position:180px 0,-240px 0,210px 0,0 0}
+}
+
+#player{
+position:absolute;
+width:48px;
+height:72px;
+z-index:1000;
+pointer-events:none
+}
+
+#nameTag{
+position:absolute;
+bottom:78px;
+left:50%;
+transform:translateX(-50%);
+padding:4px 8px;
+border-radius:7px;
+background:#111b1f;
+border:1px solid #ffd400;
+font-size:12px;
+font-weight:900;
+white-space:nowrap
+}
+
+#head{
+position:absolute;
+width:42px;
+height:40px;
+left:3px;
+top:0;
+border-radius:12px;
+background:#ffd0b0
+}
+
+#body{
+position:absolute;
+width:32px;
+height:30px;
+left:8px;
+top:40px;
+border-radius:7px;
+background:#4285ff
+}
+
+.eye{
+position:absolute;
+width:5px;
+height:7px;
+background:#111;
+border-radius:50%;
+top:14px
+}
+
+.eye1{left:11px}
+.eye2{right:11px}
+
+.mouth{
+position:absolute;
+width:11px;
+height:5px;
+border-bottom:2px solid #111;
+border-radius:50%;
+left:15px;
+top:25px
+}
+
+#crown{
+position:absolute;
+z-index:5;
+left:8px;
+top:-22px;
+font-size:25px
+}
+
+.animalEar{
+position:absolute;
+display:none;
+width:13px;
+height:13px;
+border-radius:50%;
+top:-3px;
+background:#95603c;
+z-index:2
+}
+
+#monkeyEarL,#chickenEarL,#zebraEarL{left:-4px}
+#monkeyEarR,#chickenEarR,#zebraEarR{right:-4px}
+
+.coin{
+position:absolute;
+width:29px;
+height:29px;
+border-radius:50%;
+background:radial-gradient(circle,#fff5a0,#ffd400 55%,#a57c00);
+border:3px solid #fff3a0;
+box-shadow:0 0 18px #ffd400;
+z-index:300;
+animation:coinFloat .8s infinite alternate
+}
+
+.coin:after{
+content:"$";
+position:absolute;
+left:7px;
+top:2px;
+font-weight:900;
+color:#806000
+}
+
+@keyframes coinFloat{
+to{transform:translateY(-7px) rotate(8deg)}
+}
+
+#countdown{
+position:fixed;
+top:78px;
+left:50%;
+transform:translateX(-50%);
+z-index:7000;
+font-size:42px;
+font-weight:1000;
+color:#20ff70;
+text-shadow:0 0 20px #20ff70;
+display:none
+}
+
+#lavaWarning{
+position:fixed;
+top:130px;
+left:50%;
+transform:translateX(-50%);
+z-index:7100;
+font-size:30px;
+font-weight:1000;
+color:#ff3030;
+text-shadow:0 0 20px #ff3030;
+display:none
+}
+
+#roundText{
+position:fixed;
+top:145px;
+left:50%;
+transform:translateX(-50%);
+z-index:6000;
+font-size:18px;
+font-weight:900;
+color:#ffd400;
+display:none
+}
+
+#pauseButton{
+position:fixed;
+right:18px;
+top:74px;
+z-index:6500;
+border:0;
+border-radius:10px;
+padding:10px 14px;
+background:#ffd400;
+font-weight:900;
+display:none
+}
+
+#pauseOverlay{
+display:none;
+position:fixed;
+inset:0;
+z-index:7800;
+background:rgba(0,0,0,.7);
+align-items:center;
+justify-content:center
+}
+
+.pauseBox{
+padding:30px 45px;
+border:2px solid #ffd400;
+border-radius:20px;
+background:#17252a;
+text-align:center
+}
+
+.pauseBox h1{color:#ffd400}
+
+.pauseBox button{
+border:0;
+padding:12px 25px;
+border-radius:9px;
+background:#ffd400;
+font-weight:900
+}
+
+#shop{
+display:none;
+position:fixed;
+inset:0;
+z-index:8000;
+background:rgba(0,0,0,.78);
+align-items:center;
+justify-content:center;
+padding:20px
+}
+
+.shopBox{
+width:100%;
+max-width:460px;
+padding:20px;
+border:2px solid #ffd400;
+border-radius:20px;
+background:#17252a;
+box-shadow:0 20px 70px #000
+}
+
+.shopTop{
+display:flex;
+justify-content:space-between;
+align-items:center
+}
+
+.shopTitle{
+font-size:28px;
+font-weight:900;
+color:#ffd400
+}
+
+.close{
+width:40px;
+height:40px;
+border:0;
+border-radius:9px;
+background:#2a3b40;
+color:white;
+font-size:20px
+}
+
+.shopCoins{
+text-align:center;
+margin:15px 0;
+padding:12px;
+border-radius:10px;
+background:#0b1417;
+font-weight:900
+}
+
+.item{
+margin-top:12px;
+padding:15px;
+border-radius:14px;
+background:#202f34;
+border:1px solid #3b4d52
+}
+
+.itemHead{
+display:flex;
+align-items:center;
+gap:12px
+}
+
+.icon{font-size:38px}
+
+.itemName{
+font-size:18px;
+font-weight:900
+}
+
+.itemDesc{
+font-size:13px;
+color:#aebabc;
+margin-top:4px
+}
+
+.buy{
+width:100%;
+border:0;
+border-radius:9px;
+padding:12px;
+margin-top:12px;
+background:#ffd400;
+font-weight:900
+}
+
+.buy:disabled{opacity:.4}
+
+#skinScreen{
+position:fixed;
+inset:0;
+z-index:9000;
+display:none;
+align-items:center;
+justify-content:center;
+padding:20px;
+background:radial-gradient(circle,#183c42,#061014 70%)
+}
+
+.skinBox{
+width:100%;
+max-width:720px;
+padding:25px;
+border:2px solid #ffd400;
+border-radius:22px;
+background:#152328;
+text-align:center
+}
+
+.skinBox h1{
+color:#ffd400;
+margin:5px
+}
+
+#menuCoins{
+margin:12px auto;
+padding:10px 18px;
+width:max-content;
+border-radius:10px;
+background:#0b1417;
+border:1px solid #34474c;
+font-weight:900;
+font-size:18px
+}
+
+#nameInput{
+width:100%;
+max-width:350px;
+padding:13px;
+margin:15px 0;
+border:2px solid #405157;
+border-radius:10px;
+background:#0a1417;
+color:white;
+outline:none
+}
+
+.skinGrid{
+display:grid;
+grid-template-columns:repeat(5,1fr);
+gap:9px
+}
+
+.skin{
+padding:11px 4px;
+border:2px solid #34474c;
+border-radius:13px;
+background:#202e33;
+color:white
+}
+
+.skin.selected{
+border-color:#ffd400;
+box-shadow:0 0 15px rgba(255,212,0,.4)
+}
+
+.skinEmoji{font-size:36px}
+
+.skinName{
+font-weight:900;
+margin-top:4px
+}
+
+.skinPrice{
+font-size:12px;
+color:#ffd400;
+margin-top:3px
+}
+
+#skinError{
+height:20px;
+color:#ff6666;
+margin:8px
+}
+
+#startButton{
+border:0;
+border-radius:10px;
+padding:14px 28px;
+background:#ffd400;
+font-weight:900
+}
+
+#message{
+display:none;
+position:fixed;
+inset:0;
+z-index:8500;
+align-items:center;
+justify-content:center;
+background:rgba(0,0,0,.8)
+}
+
+.messageBox{
+padding:30px;
+border:2px solid #ffd400;
+border-radius:20px;
+background:#17252a;
+text-align:center
+}
+
+.messageBox button{
+border:0;
+padding:12px 25px;
+border-radius:9px;
+background:#ffd400;
+font-weight:900
+}
+
+/* MOBILE MODE */
+
+@media(max-width:799px){
+
+body.mobileMode #pcError{
+display:none!important
+}
+
+body.mobileMode #mobileRotate{
+display:flex
+}
+
+body.mobileMode #mainMenu,
+body.mobileMode #skinScreen{
+display:none!important
+}
+
+body.mobileMode.landscape #mobileRotate{
+display:none
+}
+
+body.mobileMode.landscape #mainMenu{
+display:flex
+}
+
+body.mobileMode.landscape #mobileControls{
+display:block
+}
+
+body.mobileMode.landscape #topbar{
+height:52px;
+padding:0 10px
+}
+
+body.mobileMode.landscape #game{
+top:52px;
+height:calc(100vh - 52px)
+}
+
+body.mobileMode.landscape .logo{
+font-size:17px
+}
+
+body.mobileMode.landscape .topBtn{
+padding:7px 9px;
+font-size:12px
+}
+
+body.mobileMode.landscape #pauseButton{
+display:none
+}
+
+body.mobileMode.landscape #countdown{
+top:58px;
+font-size:34px
+}
+
+body.mobileMode.landscape #lavaWarning{
+top:100px;
+font-size:20px
+}
+
+body.mobileMode.landscape #roundText{
+top:105px;
+font-size:15px
+}
+
+body.mobileMode.landscape #skinScreen{
+padding:8px
+}
+
+body.mobileMode.landscape .skinBox{
+padding:15px;
+max-width:700px
+}
+
+body.mobileMode.landscape .skinBox p{
+margin:7px
+}
+
+body.mobileMode.landscape #nameInput{
+margin:8px 0
+}
+
+body.mobileMode.landscape .skin{
+padding:6px 2px
+}
+
+body.mobileMode.landscape .skinEmoji{
+font-size:27px
+}
+
+body.mobileMode.landscape .skinName{
+font-size:12px
+}
+
+body.mobileMode.landscape .skinPrice{
+font-size:10px
+}
+
+body.mobileMode.landscape #startButton{
+padding:10px 22px
+}
+}
+</style>
+</head>
+
+<body>
+
+<!-- MOBILE ROTATION SCREEN -->
+<div id="mobileRotate">
+<div class="rotateBox">
+<div class="rotateIcon">📱↔️</div>
+<h1>Rotate Your Device</h1>
+<p>Turn your device horizontally to play SleepyLabs.</p>
+</div>
+</div>
+
+<div id="pcError">
+<div class="pcBox">
+<h1>🖥️ SLEEPYLABS</h1>
+<p>This game is designed for PC/computer.</p>
+<p>💻 If you're on a PC, press the button below to enter Full Screen.</p>
+<button class="fullBtn" onclick="enterPCFullscreen()">⛶ FULL SCREEN</button>
+</div>
+</div>
+
+<div id="mainMenu">
+<div class="menuBox">
+<div class="menuLogo">🧪 SleepyLabs</div>
+<div class="menuSub">Escape the laboratory before the lava gets you 🌋</div>
+<div class="menuCoins">🪙 <span id="mainCoinText">0</span> Coins</div>
+<button class="playButton" onclick="openCharacterScreen()">▶️ PLAY SLEEPYLABS</button>
+
+<div class="socials">
+<button class="social" onclick="openYouTube()">▶️ YouTube</button>
+<button class="social" onclick="openTwitch()">💜 Twitch</button>
+</div>
+
+<div class="credit">Made By SleepyBlocks</div>
+</div>
+</div>
+
+<div id="topbar">
+<div class="logo">🧪 SleepyLabs</div>
+
+<div class="stats">
+🪙 <span id="coinText">0</span>
+<button class="topBtn" onclick="openShop()">🛒 Shop</button>
+<button class="topBtn" onclick="togglePause()">⏸️</button>
+<button class="topBtn" onclick="fullscreen()">⛶</button>
+</div>
+</div>
+
+<button id="pauseButton" onclick="togglePause()">⏸️ PAUSE</button>
+
+<div id="countdown">15</div>
+<div id="lavaWarning">🌋 LAVA IS RISING!</div>
+<div id="roundText">STAGE 1</div>
+
+<div id="game">
+<div id="world">
+
+<div class="light" style="left:100px;top:80px"></div>
+<div class="light" style="left:550px;top:110px"></div>
+<div class="light" style="left:1000px;top:70px"></div>
+<div class="light" style="left:1500px;top:100px"></div>
+<div class="light" style="left:2050px;top:80px"></div>
+
+<div class="machine" style="left:200px;top:120px"></div>
+<div class="machine" style="left:700px;top:160px"></div>
+<div class="machine" style="left:1200px;top:100px"></div>
+<div class="machine" style="left:1750px;top:140px"></div>
+
+<div class="labText" style="left:50px;top:120px">⚗ LAB ZONE 01</div>
+<div class="labText" style="left:900px;top:120px">🧬 EXPERIMENT AREA</div>
+<div class="labText" style="left:1750px;top:110px">☢️ DANGER ZONE</div>
+
+<!-- STAGE 1 -->
+
+<div class="platform r1" style="left:80px;bottom:300px;width:250px"></div>
+<div class="platform r1" style="left:400px;bottom:300px;width:120px"></div>
+<div class="platform r1" style="left:590px;bottom:430px;width:110px"></div>
+<div class="platform r1" style="left:770px;bottom:560px;width:110px"></div>
+<div class="platform r1" style="left:950px;bottom:450px;width:95px"></div>
+<div class="platform r1" style="left:1110px;bottom:570px;width:110px"></div>
+<div class="platform r1" style="left:1290px;bottom:650px;width:100px"></div>
+<div class="platform r1" style="left:1460px;bottom:650px;width:110px"></div>
+<div class="platform r1" style="left:1620px;bottom:720px;width:180px"></div>
+
+<!-- EXACTLY 6 COINS -->
+
+<div class="coin r1" style="left:170px;bottom:345px"></div>
+<div class="coin r1" style="left:440px;bottom:345px"></div>
+<div class="coin r1" style="left:625px;bottom:475px"></div>
+<div class="coin r1" style="left:805px;bottom:605px"></div>
+<div class="coin r1" style="left:990px;bottom:495px"></div>
+<div class="coin r1" style="left:1150px;bottom:615px"></div>
+
+<div class="finish f1" style="left:1880px;bottom:880px">
+<div class="finishText">🏁 STAGE 1 FINISH!</div>
+<div class="finishPlatform"></div>
+</div>
+
+<!-- STAGE 2 -->
+
+<div class="platform r2" style="display:none;left:80px;bottom:300px;width:220px"></div>
+<div class="platform r2" style="display:none;left:400px;bottom:330px;width:95px"></div>
+<div class="platform r2" style="display:none;left:570px;bottom:390px;width:85px"></div>
+<div class="platform r2" style="display:none;left:730px;bottom:340px;width:90px"></div>
+<div class="platform r2" style="display:none;left:900px;bottom:450px;width:85px"></div>
+<div class="platform r2" style="display:none;left:1070px;bottom:520px;width:85px"></div>
+<div class="platform r2" style="display:none;left:1240px;bottom:470px;width:80px"></div>
+<div class="platform r2" style="display:none;left:1410px;bottom:560px;width:85px"></div>
+<div class="platform r2" style="display:none;left:1580px;bottom:640px;width:85px"></div>
+<div class="platform r2" style="display:none;left:1750px;bottom:590px;width:90px"></div>
+<div class="platform r2" style="display:none;left:1920px;bottom:700px;width:100px"></div>
+
+<!-- EXACTLY 5 COINS -->
+
+<div class="coin r2" style="display:none;left:150px;bottom:345px"></div>
+<div class="coin r2" style="display:none;left:430px;bottom:375px"></div>
+<div class="coin r2" style="display:none;left:600px;bottom:435px"></div>
+<div class="coin r2" style="display:none;left:930px;bottom:495px"></div>
+<div class="coin r2" style="display:none;left:1270px;bottom:515px"></div>
+
+<div class="finish f2" style="display:none;left:2100px;bottom:810px">
+<div class="finishText">🏁 STAGE 2 FINISH!</div>
+<div class="finishPlatform"></div>
+</div>
+
+<!-- STAGE 3 -->
+
+<div class="platform r3" style="display:none;left:80px;bottom:300px;width:210px"></div>
+<div class="platform r3" style="display:none;left:390px;bottom:330px;width:90px"></div>
+<div class="platform r3" style="display:none;left:550px;bottom:410px;width:82px"></div>
+<div class="platform r3" style="display:none;left:710px;bottom:360px;width:85px"></div>
+<div class="platform r3" style="display:none;left:875px;bottom:470px;width:80px"></div>
+<div class="platform r3" style="display:none;left:1035px;bottom:540px;width:78px"></div>
+<div class="platform r3" style="display:none;left:1195px;bottom:500px;width:80px"></div>
+<div class="platform r3" style="display:none;left:1360px;bottom:600px;width:78px"></div>
+<div class="platform r3" style="display:none;left:1520px;bottom:660px;width:82px"></div>
+<div class="platform r3" style="display:none;left:1690px;bottom:620px;width:78px"></div>
+<div class="platform r3" style="display:none;left:1850px;bottom:720px;width:82px"></div>
+<div class="platform r3" style="display:none;left:2020px;bottom:770px;width:85px"></div>
+<div class="platform r3" style="display:none;left:2190px;bottom:820px;width:100px"></div>
+
+<!-- EXACTLY 3 COINS -->
+
+<div class="coin r3" style="display:none;left:145px;bottom:345px"></div>
+<div class="coin r3" style="display:none;left:745px;bottom:405px"></div>
+<div class="coin r3" style="display:none;left:1555px;bottom:705px"></div>
+
+<div class="finish f3" style="display:none;left:2320px;bottom:850px">
+<div class="finishText">🏁 STAGE 3 FINISH!</div>
+<div class="finishPlatform"></div>
+</div>
+
+<div id="lava"></div>
+
+<div id="player">
+<div id="nameTag">Player</div>
+<div id="crown">👑</div>
+
+<div id="head">
+<div id="monkeyEarL" class="animalEar"></div>
+<div id="monkeyEarR" class="animalEar"></div>
+<div id="chickenEarL" class="animalEar"></div>
+<div id="chickenEarR" class="animalEar"></div>
+<div id="zebraEarL" class="animalEar"></div>
+<div id="zebraEarR" class="animalEar"></div>
+<div class="eye eye1"></div>
+<div class="eye eye2"></div>
+<div class="mouth"></div>
+</div>
+
+<div id="body"></div>
+</div>
+
+</div>
+</div>
+
+<!-- MOBILE CONTROLS -->
+
+<div id="mobileControls">
+
+<div class="mobileLeft">
+<button class="mobileBtn" id="leftBtn">◀</button>
+<button class="mobileBtn" id="rightBtn">▶</button>
+</div>
+
+<div class="mobileRight">
+<button class="mobileBtn mobileJump" id="jumpBtn">⬆</button>
+</div>
+
+</div>
+
+<!-- CHARACTER SCREEN -->
+
+<div id="skinScreen">
+<div class="skinBox">
+
+<h1>🧪 SleepyLabs</h1>
+
+<div id="menuCoins">
+🪙 <span id="skinCoinText">0</span> Coins
+</div>
+
+<p>Choose your character before entering the laboratory.</p>
+
+<input id="nameInput" maxlength="16" placeholder="Enter your name">
+
+<div class="skinGrid">
+
+<button class="skin selected" data-price="0" data-skin="boy" onclick="selectSkin(this)">
+<div class="skinEmoji">👦</div>
+<div class="skinName">Boy</div>
+<div class="skinPrice">FREE</div>
+</button>
+
+<button class="skin" data-price="0" data-skin="girl" onclick="selectSkin(this)">
+<div class="skinEmoji">👧</div>
+<div class="skinName">Girl</div>
+<div class="skinPrice">FREE</div>
+</button>
+
+<button class="skin" data-price="15" data-skin="monkey" onclick="selectSkin(this)">
+<div class="skinEmoji">🐵</div>
+<div class="skinName">Monkey</div>
+<div class="skinPrice">15 🪙</div>
+</button>
+
+<button class="skin" data-price="20" data-skin="chicken" onclick="selectSkin(this)">
+<div class="skinEmoji">🐔</div>
+<div class="skinName">Chicken</div>
+<div class="skinPrice">20 🪙</div>
+</button>
+
+<button class="skin" data-price="25" data-skin="zebra" onclick="selectSkin(this)">
+<div class="skinEmoji">🦓</div>
+<div class="skinName">Zebra</div>
+<div class="skinPrice">25 🪙</div>
+</button>
+
+</div>
+
+<div id="skinError"></div>
+
+<button id="startButton" onclick="startGame()">
+🚀 ENTER THE LAB
+</button>
+
+</div>
+</div>
+
+<!-- SHOP -->
+
+<div id="shop">
+<div class="shopBox">
+
+<div class="shopTop">
+<div class="shopTitle">🛒 SHOP</div>
+<button class="close" onclick="closeShop()">✕</button>
+</div>
+
+<div class="shopCoins">
+🪙 <span id="shopCoins">0</span> Coins
+</div>
+
+<div class="item">
+<div class="itemHead">
+<div class="icon">⚡</div>
+<div>
+<div class="itemName">Speed Boost</div>
+<div class="itemDesc">Move faster through the lab.</div>
+</div>
+</div>
+<button class="buy" id="speedBuy" onclick="buySpeed()">BUY — 5 🪙</button>
+</div>
+
+<div class="item">
+<div class="itemHead">
+<div class="icon">🦘</div>
+<div>
+<div class="itemName">Jump Boost</div>
+<div class="itemDesc">Jump higher.</div>
+</div>
+</div>
+<button class="buy" id="jumpBuy" onclick="buyJump()">BUY — 10 🪙</button>
+</div>
+
+</div>
+</div>
+
+<!-- PAUSE -->
+
+<div id="pauseOverlay">
+<div class="pauseBox">
+<h1>⏸️ GAME PAUSED</h1>
+<p>The lava and timer are frozen.</p>
+<button onclick="togglePause()">▶️ RESUME</button>
+</div>
+</div>
+
+<!-- MESSAGE -->
+
+<div id="message">
+<div class="messageBox">
+<h1 id="messageTitle">💀 YOU LOST!</h1>
+<p id="messageText"></p>
+<button id="messageButton" onclick="messageAction()">🔄 STAGE 1</button>
+</div>
+</div>
+
+<script>
+
+const world=document.getElementById("world");
+const player=document.getElementById("player");
+const lava=document.getElementById("lava");
+
+let platforms=[],coins=[];
+
+let x=0,y=0,vx=0,vy=0;
+
+let left=false,right=false,grounded=false;
+
+let started=false,dead=false,paused=false;
+
+let score=Number(localStorage.getItem("sleepyLabsCoins")||0);
+
+let speedBoost=false;
+let jumpBoost=false;
+
+let selectedSkin="boy";
+let playerName="Player";
+let round=1;
+
+let timer=15;
+let timerInterval=null;
+let lavaAnimation=null;
+
+
+/* ================= DEVICE ================= */
+
+function checkDevice(){
+
+const mobile=window.innerWidth<800;
+
+if(mobile){
+
+document.body.classList.add("mobileMode");
+
+if(window.innerWidth>window.innerHeight){
+
+document.body.classList.add("landscape");
+
+}else{
+
+document.body.classList.remove("landscape");
+
+}
+
+}else{
+
+document.body.classList.remove("mobileMode");
+document.body.classList.remove("landscape");
+
+document.getElementById("pcError").style.display="flex";
+
+}
+
+}
+
+window.addEventListener("load",()=>{
+
+checkDevice();
+updateCoins();
+
+});
+
+window.addEventListener("resize",checkDevice);
+
+
+/* ================= FULLSCREEN ================= */
+
+async function requestFullscreenMobile(){
+
+try{
+
+if(document.documentElement.requestFullscreen){
+
+await document.documentElement.requestFullscreen();
+
+}
+
+}catch(e){}
+
+try{
+
+if(screen.orientation && screen.orientation.lock){
+
+await screen.orientation.lock("landscape");
+
+}
+
+}catch(e){}
+
+}
+
+async function enterPCFullscreen(){
+
+if(!document.fullscreenElement){
+
+try{
+await document.documentElement.requestFullscreen();
+}catch(e){}
+
+}
+
+document.getElementById("pcError").style.display="none";
+document.getElementById("mainMenu").style.display="flex";
+
+}
+
+async function fullscreen(){
+
+if(!document.fullscreenElement){
+
+try{
+await document.documentElement.requestFullscreen();
+}catch(e){}
+
+}else{
+
+try{
+await document.exitFullscreen();
+}catch(e){}
+
+}
+
+}
+
+
+/* ================= COINS ================= */
+
+function saveCoins(){
+
+localStorage.setItem(
+"sleepyLabsCoins",
+String(score)
+);
+
+}
+
+function updateCoins(){
+
+saveCoins();
+
+document.getElementById("coinText").textContent=score;
+document.getElementById("shopCoins").textContent=score;
+document.getElementById("mainCoinText").textContent=score;
+document.getElementById("skinCoinText").textContent=score;
+
+updateShop();
+
+}
+
+
+/* ================= MENU ================= */
+
+function openYouTube(){
+
+window.open(
+"https://www.youtube.com/@SleepyBlocks",
+"_blank"
+);
+
+}
+
+function openTwitch(){
+
+window.open(
+"https://www.twitch.tv/sleepyblocks1",
+"_blank"
+);
+
+}
+
+function openCharacterScreen(){
+
+document.getElementById("mainMenu").style.display="none";
+
+document.getElementById("skinCoinText").textContent=score;
+
+document.getElementById("skinScreen").style.display="flex";
+
+if(document.body.classList.contains("mobileMode")){
+
+requestFullscreenMobile();
+
+}
+
+}
+
+
+/* ================= OBJECTS ================= */
+
+function updateObjects(){
+
+let selector;
+
+if(round===1)
+selector=".platform.r1";
+
+else if(round===2)
+selector=".platform.r2";
+
+else
+selector=".platform.r3";
+
+platforms=[
+...document.querySelectorAll(selector)
 ];
 
-/* =========================
-   TABLE
-========================= */
+coins=[
+...document.querySelectorAll(
+round===1?".coin.r1":
+round===2?".coin.r2":
+".coin.r3"
+)
+];
 
-const table = {
-    x: 450,
-    y: 350,
-    width: 500,
-    height: 170
+}
+
+
+/* ================= SPAWN ================= */
+
+function spawn(){
+
+updateObjects();
+
+const first=platforms[0];
+
+const platformBottom=
+world.offsetHeight-first.offsetTop;
+
+x=first.offsetLeft+30;
+
+y=platformBottom+28;
+
+vx=0;
+vy=0;
+
+grounded=true;
+
+draw();
+camera();
+
+}
+
+
+/* ================= DRAW ================= */
+
+function draw(){
+
+player.style.left=x+"px";
+player.style.bottom=y+"px";
+
+}
+
+
+/* ================= CAMERA ================= */
+
+function camera(){
+
+const screenWidth=window.innerWidth;
+
+let target=
+x-screenWidth/2+24;
+
+const maxCamera=Math.max(
+0,
+world.offsetWidth-screenWidth
+);
+
+if(target<0)
+target=0;
+
+if(target>maxCamera)
+target=maxCamera;
+
+world.style.transform=
+`translateX(${-target}px)`;
+
+}
+
+
+/* ================= SKINS ================= */
+
+function selectSkin(button){
+
+document.querySelectorAll(".skin")
+.forEach(s=>s.classList.remove("selected"));
+
+button.classList.add("selected");
+
+selectedSkin=button.dataset.skin;
+
+}
+
+
+function applySkin(){
+
+const head=document.getElementById("head");
+const body=document.getElementById("body");
+const crown=document.getElementById("crown");
+
+document.querySelectorAll(".animalEar")
+.forEach(e=>e.style.display="none");
+
+
+if(selectedSkin==="boy"){
+
+head.style.background="#ffd0b0";
+body.style.background="#4285ff";
+crown.style.display="block";
+
+}
+
+
+if(selectedSkin==="girl"){
+
+head.style.background="#ffd0b0";
+body.style.background="#ff69b4";
+crown.style.display="block";
+
+}
+
+
+if(selectedSkin==="monkey"){
+
+head.style.background="#95603c";
+body.style.background="#714425";
+crown.style.display="none";
+
+document.getElementById("monkeyEarL").style.display="block";
+document.getElementById("monkeyEarR").style.display="block";
+
+}
+
+
+if(selectedSkin==="chicken"){
+
+head.style.background="#fff0a0";
+body.style.background="#e4c52f";
+crown.style.display="none";
+
+document.getElementById("chickenEarL").style.display="block";
+document.getElementById("chickenEarR").style.display="block";
+
+}
+
+
+if(selectedSkin==="zebra"){
+
+head.style.background="#eee";
+body.style.background="#222";
+crown.style.display="none";
+
+document.getElementById("zebraEarL").style.display="block";
+document.getElementById("zebraEarR").style.display="block";
+
+}
+
+}
+
+
+/* ================= START ================= */
+
+function startGame(){
+
+playerName=
+document.getElementById("nameInput").value.trim();
+
+if(!playerName){
+
+document.getElementById("skinError")
+.textContent="Enter your name first!";
+
+return;
+
+}
+
+const skin=
+document.querySelector(".skin.selected");
+
+const price=
+Number(skin.dataset.price);
+
+if(price>score){
+
+document.getElementById("skinError")
+.textContent="You don't have enough coins!";
+
+return;
+
+}
+
+score-=price;
+
+document.getElementById("nameTag")
+.textContent=playerName;
+
+applySkin();
+updateCoins();
+
+document.getElementById("skinScreen")
+.style.display="none";
+
+document.getElementById("topbar")
+.style.display="flex";
+
+document.getElementById("roundText")
+.style.display="block";
+
+document.getElementById("game")
+.style.display="block";
+
+if(!document.body.classList.contains("mobileMode")){
+
+document.getElementById("pauseButton")
+.style.display="block";
+
+}
+
+started=true;
+dead=false;
+paused=false;
+round=1;
+
+showRound(1);
+
+spawn();
+
+startCountdown(15);
+
+requestAnimationFrame(loop);
+
+}
+
+
+/* ================= ROUNDS ================= */
+
+function showRound(number){
+
+document.querySelectorAll(".r1")
+.forEach(el=>
+el.style.display=
+number===1?"block":"none"
+);
+
+document.querySelectorAll(".r2")
+.forEach(el=>
+el.style.display=
+number===2?"block":"none"
+);
+
+document.querySelectorAll(".r3")
+.forEach(el=>
+el.style.display=
+number===3?"block":"none"
+);
+
+document.querySelectorAll(".finish")
+.forEach(el=>
+el.style.display="none"
+);
+
+document.querySelector(".f"+number)
+.style.display="block";
+
+document.getElementById("roundText")
+.textContent="STAGE "+number;
+
+}
+
+
+function resetStageCoins(number){
+
+const selector=
+number===1?".coin.r1":
+number===2?".coin.r2":
+".coin.r3";
+
+document.querySelectorAll(selector)
+.forEach(coin=>{
+coin.style.display="block";
+});
+
+}
+
+
+/* ================= TIMER / LAVA ================= */
+
+function startCountdown(seconds){
+
+clearInterval(timerInterval);
+
+if(lavaAnimation)
+cancelAnimationFrame(lavaAnimation);
+
+timer=seconds;
+
+lava.style.height="55px";
+
+const countdown=
+document.getElementById("countdown");
+
+const warning=
+document.getElementById("lavaWarning");
+
+countdown.style.display="block";
+warning.style.display="block";
+
+countdown.textContent=timer;
+
+countdown.style.color="#20ff70";
+
+let start=performance.now();
+
+function rise(now){
+
+if(dead||paused)
+return;
+
+const progress=
+Math.min(
+1,
+(now-start)/(seconds*1000)
+);
+
+const height=
+55+progress*900;
+
+lava.style.height=height+"px";
+
+if(progress<1)
+lavaAnimation=
+requestAnimationFrame(rise);
+
+}
+
+lavaAnimation=
+requestAnimationFrame(rise);
+
+
+timerInterval=setInterval(()=>{
+
+if(paused)
+return;
+
+timer--;
+
+countdown.textContent=
+Math.max(0,timer);
+
+if(timer<=5)
+countdown.style.color="#ff3030";
+
+if(timer<=0){
+
+clearInterval(timerInterval);
+
+countdown.style.display="none";
+warning.style.display="none";
+
+die("THE VOLCANO ERUPTED!");
+
+}
+
+},1000);
+
+}
+
+
+/* ================= PHYSICS ================= */
+
+function playerRect(){
+
+return{
+left:x,
+right:x+48,
+bottom:y,
+top:y+72
 };
 
-/* =========================
-   CHAIRS
-========================= */
-
-const chairs = [];
-
-for(let i = 0; i < 5; i++){
-    chairs.push({
-        x: 500 + i * 90,
-        y: 320
-    });
-
-    chairs.push({
-        x: 500 + i * 90,
-        y: 550
-    });
 }
 
-/* =========================
-   BUTTON
-========================= */
 
-const redButton = {
-    x: 1160,
-    y: 150,
-    pressed: false
-};
+function platformCollision(){
 
-/* =========================
-   MOVEMENT
-========================= */
+const p=playerRect();
 
-addEventListener("keydown", e => {
-    keys[e.key.toLowerCase()] = true;
+for(const platform of platforms){
+
+const leftEdge=
+platform.offsetLeft;
+
+const rightEdge=
+leftEdge+platform.offsetWidth;
+
+const platformBottom=
+world.offsetHeight-platform.offsetTop;
+
+if(
+vy<=0 &&
+p.right>leftEdge &&
+p.left<rightEdge &&
+p.bottom<=platformBottom &&
+p.bottom-vy>=platformBottom
+){
+
+y=platformBottom;
+vy=0;
+grounded=true;
+
+}
+
+}
+
+}
+
+
+/* ================= COINS ================= */
+
+function collectCoins(){
+
+const p=playerRect();
+
+coins.forEach(coin=>{
+
+if(coin.style.display==="none")
+return;
+
+const leftEdge=
+coin.offsetLeft;
+
+const rightEdge=
+leftEdge+coin.offsetWidth;
+
+const bottom=
+world.offsetHeight-
+coin.offsetTop-
+coin.offsetHeight;
+
+const top=
+world.offsetHeight-
+coin.offsetTop;
+
+if(
+p.right>leftEdge &&
+p.left<rightEdge &&
+p.top>bottom &&
+p.bottom<top
+){
+
+coin.style.display="none";
+
+score++;
+
+updateCoins();
+
+}
+
 });
 
-addEventListener("keyup", e => {
-    keys[e.key.toLowerCase()] = false;
+}
+
+
+/* ================= GAME LOOP ================= */
+
+function loop(){
+
+if(!started||dead||paused)
+return;
+
+const speed=
+speedBoost?1.2:.95;
+
+if(left)
+vx-=speed;
+
+if(right)
+vx+=speed;
+
+vx*=.82;
+
+x+=vx;
+
+vy-=.75;
+
+y+=vy;
+
+grounded=false;
+
+platformCollision();
+
+if(x<0)
+x=0;
+
+if(x>world.offsetWidth-48)
+x=world.offsetWidth-48;
+
+const lavaHeight=
+parseInt(
+getComputedStyle(lava).height
+);
+
+if(y<=lavaHeight){
+
+die("THE LAVA GOT YOU!");
+
+return;
+
+}
+
+collectCoins();
+
+
+let finishX;
+let finishY;
+
+if(round===1){
+
+finishX=1880;
+finishY=820;
+
+}
+
+if(round===2){
+
+finishX=2100;
+finishY=750;
+
+}
+
+if(round===3){
+
+finishX=2320;
+finishY=820;
+
+}
+
+if(
+x+48>finishX &&
+x<finishX+360 &&
+y>finishY
+){
+
+finishRound();
+return;
+
+}
+
+draw();
+camera();
+
+requestAnimationFrame(loop);
+
+}
+
+
+/* ================= JUMP ================= */
+
+function jump(){
+
+if(paused||!grounded)
+return;
+
+vy=
+jumpBoost?20:15;
+
+grounded=false;
+
+}
+
+
+/* ================= PAUSE ================= */
+
+function togglePause(){
+
+if(!started||dead)
+return;
+
+paused=!paused;
+
+document.getElementById("pauseOverlay")
+.style.display=
+paused?"flex":"none";
+
+document.getElementById("pauseButton")
+.textContent=
+paused?"▶️ RESUME":"⏸️ PAUSE";
+
+if(!paused)
+requestAnimationFrame(loop);
+
+}
+
+
+/* ================= SHOP ================= */
+
+function openShop(){
+
+if(!started||dead)
+return;
+
+paused=true;
+
+document.getElementById("pauseOverlay")
+.style.display="none";
+
+document.getElementById("shop")
+.style.display="flex";
+
+updateShop();
+
+}
+
+function closeShop(){
+
+document.getElementById("shop")
+.style.display="none";
+
+paused=false;
+
+requestAnimationFrame(loop);
+
+}
+
+
+function updateShop(){
+
+const speed=
+document.getElementById("speedBuy");
+
+const jump=
+document.getElementById("jumpBuy");
+
+if(speedBoost){
+
+speed.textContent="✓ OWNED";
+speed.disabled=true;
+
+}else{
+
+speed.textContent="BUY — 5 🪙";
+speed.disabled=score<5;
+
+}
+
+if(jumpBoost){
+
+jump.textContent="✓ OWNED";
+jump.disabled=true;
+
+}else{
+
+jump.textContent="BUY — 10 🪙";
+jump.disabled=score<10;
+
+}
+
+}
+
+
+function buySpeed(){
+
+if(score<5||speedBoost)
+return;
+
+score-=5;
+
+speedBoost=true;
+
+updateCoins();
+
+}
+
+
+function buyJump(){
+
+if(score<10||jumpBoost)
+return;
+
+score-=10;
+
+jumpBoost=true;
+
+updateCoins();
+
+}
+
+
+/* ================= FINISH ================= */
+
+function finishRound(){
+
+clearInterval(timerInterval);
+
+if(lavaAnimation)
+cancelAnimationFrame(lavaAnimation);
+
+document.getElementById("countdown")
+.style.display="none";
+
+document.getElementById("lavaWarning")
+.style.display="none";
+
+dead=true;
+
+
+if(round===1){
+
+document.getElementById("messageTitle")
+.textContent="🚀 STAGE 1 COMPLETE!";
+
+document.getElementById("messageText")
+.textContent="Jump to the next stage!";
+
+document.getElementById("messageButton")
+.textContent="🚀 JUMP TO STAGE 2";
+
+}
+
+else if(round===2){
+
+document.getElementById("messageTitle")
+.textContent="🔥 STAGE 2 COMPLETE!";
+
+document.getElementById("messageText")
+.textContent="Jump to the next stage!";
+
+document.getElementById("messageButton")
+.textContent="🚀 JUMP TO STAGE 3";
+
+}
+
+else{
+
+document.getElementById("messageTitle")
+.textContent="🏆 STAGE 3 COMPLETE!";
+
+document.getElementById("messageText")
+.textContent="You Escaped SleepyLabs!";
+
+document.getElementById("messageButton")
+.textContent="🎭 CHARACTER";
+
+}
+
+document.getElementById("message")
+.style.display="flex";
+
+}
+
+
+/* ================= MESSAGE ================= */
+
+function messageAction(){
+
+if(
+document.getElementById("messageTitle")
+.textContent.includes("LOST")
+){
+
+restart();
+
+return;
+
+}
+
+if(round===1){
+
+nextRound(2);
+
+}
+
+else if(round===2){
+
+nextRound(3);
+
+}
+
+else{
+
+characterScreen();
+
+}
+
+}
+
+
+/* ================= NEXT ROUND ================= */
+
+function nextRound(next){
+
+document.getElementById("message")
+.style.display="none";
+
+round=next;
+
+dead=false;
+paused=false;
+started=true;
+
+vx=0;
+vy=0;
+
+resetStageCoins(round);
+
+showRound(round);
+
+spawn();
+
+startCountdown(15);
+
+requestAnimationFrame(loop);
+
+}
+
+
+/* ================= CHARACTER ================= */
+
+function characterScreen(){
+
+clearInterval(timerInterval);
+
+if(lavaAnimation)
+cancelAnimationFrame(lavaAnimation);
+
+started=false;
+dead=false;
+paused=false;
+
+document.getElementById("message")
+.style.display="none";
+
+document.getElementById("shop")
+.style.display="none";
+
+document.getElementById("pauseOverlay")
+.style.display="none";
+
+document.getElementById("topbar")
+.style.display="none";
+
+document.getElementById("pauseButton")
+.style.display="none";
+
+document.getElementById("roundText")
+.style.display="none";
+
+document.getElementById("game")
+.style.display="none";
+
+document.getElementById("skinCoinText")
+.textContent=score;
+
+document.getElementById("skinScreen")
+.style.display="flex";
+
+}
+
+
+/* ================= DIE ================= */
+
+function die(reason){
+
+if(dead)
+return;
+
+dead=true;
+
+clearInterval(timerInterval);
+
+if(lavaAnimation)
+cancelAnimationFrame(lavaAnimation);
+
+document.getElementById("countdown")
+.style.display="none";
+
+document.getElementById("lavaWarning")
+.style.display="none";
+
+/* Reset coins/boosts exactly like original */
+
+score=0;
+
+speedBoost=false;
+jumpBoost=false;
+
+updateCoins();
+
+setTimeout(()=>{
+
+document.getElementById("messageTitle")
+.textContent="💀 YOU LOST!";
+
+document.getElementById("messageText")
+.textContent=
+reason+" You respawn at Stage 1.";
+
+document.getElementById("messageButton")
+.textContent="🔄 STAGE 1";
+
+document.getElementById("message")
+.style.display="flex";
+
+},250);
+
+}
+
+
+/* ================= RESTART ================= */
+
+function restart(){
+
+document.getElementById("message")
+.style.display="none";
+
+round=1;
+
+vx=0;
+vy=0;
+
+speedBoost=false;
+jumpBoost=false;
+
+dead=false;
+paused=false;
+started=true;
+
+resetStageCoins(1);
+
+showRound(1);
+
+updateCoins();
+
+lava.style.height="55px";
+
+spawn();
+
+startCountdown(15);
+
+requestAnimationFrame(loop);
+
+}
+
+
+/* ================= PC CONTROLS ================= */
+
+document.addEventListener("keydown",e=>{
+
+const key=e.key.toLowerCase();
+
+if(key==="a"||key==="arrowleft")
+left=true;
+
+if(key==="d"||key==="arrowright")
+right=true;
+
+if(
+key==="w"||
+key==="arrowup"||
+key===" "
+){
+
+e.preventDefault();
+
+jump();
+
+}
+
 });
 
-function movePlayer(){
 
-    let dx = 0;
-    let dy = 0;
+document.addEventListener("keyup",e=>{
 
-    if(keys["w"] || keys["arrowup"]) dy--;
-    if(keys["s"] || keys["arrowdown"]) dy++;
-    if(keys["a"] || keys["arrowleft"]) dx--;
-    if(keys["d"] || keys["arrowright"]) dx++;
+const key=e.key.toLowerCase();
 
-    if(dx !== 0 || dy !== 0){
+if(key==="a"||key==="arrowleft")
+left=false;
 
-        const length = Math.sqrt(dx * dx + dy * dy);
+if(key==="d"||key==="arrowright")
+right=false;
 
-        dx /= length;
-        dy /= length;
-
-        player.x += dx * player.speed;
-        player.y += dy * player.speed;
-
-        player.walk += 0.2;
-    }
-
-    player.x = Math.max(60, Math.min(room.width - 60, player.x));
-    player.y = Math.max(80, Math.min(room.height - 60, player.y));
-}
-
-/* =========================
-   DRAW ROOM
-========================= */
-
-function drawRoom(){
-
-    // Floor
-    ctx.fillStyle = "#27313b";
-    ctx.fillRect(
-        room.x,
-        room.y,
-        room.width,
-        room.height
-    );
-
-    // Floor tiles
-    ctx.strokeStyle = "#313d48";
-    ctx.lineWidth = 1;
-
-    for(let x = 0; x < room.width; x += 50){
-
-        ctx.beginPath();
-        ctx.moveTo(x,0);
-        ctx.lineTo(x,room.height);
-        ctx.stroke();
-    }
-
-    for(let y = 0; y < room.height; y += 50){
-
-        ctx.beginPath();
-        ctx.moveTo(0,y);
-        ctx.lineTo(room.width,y);
-        ctx.stroke();
-    }
-
-    // Walls
-    ctx.fillStyle = "#4b5865";
-
-    ctx.fillRect(0,0,1400,30);
-    ctx.fillRect(0,820,1400,30);
-    ctx.fillRect(0,0,30,850);
-    ctx.fillRect(1370,0,30,850);
-
-    // Back screen
-    ctx.fillStyle = "#111820";
-    ctx.fillRect(470,70,460,170);
-
-    ctx.fillStyle = "#3e9be8";
-    ctx.fillRect(490,90,420,130);
-
-    ctx.fillStyle = "#dcecff";
-    ctx.font = "bold 28px Arial";
-    ctx.textAlign = "center";
-    ctx.fillText(
-        "SLEEPYLABS",
-        700,
-        160
-    );
-
-    ctx.font = "16px Arial";
-    ctx.fillText(
-        "LAB MEETING ROOM",
-        700,
-        190
-    );
-
-    // Lights
-    for(let x = 150; x < 1300; x += 300){
-
-        ctx.fillStyle = "#dcecff";
-        ctx.fillRect(x,45,150,12);
-
-    }
-}
-
-/* =========================
-   DRAW TABLE
-========================= */
-
-function drawTable(){
-
-    // Legs
-    ctx.fillStyle = "#303942";
-
-    ctx.fillRect(
-        table.x + 30,
-        table.y + table.height - 10,
-        20,
-        80
-    );
-
-    ctx.fillRect(
-        table.x + table.width - 50,
-        table.y + table.height - 10,
-        20,
-        80
-    );
-
-    // Table top
-    ctx.fillStyle = "#6b7783";
-
-    ctx.fillRect(
-        table.x,
-        table.y,
-        table.width,
-        table.height
-    );
-
-    ctx.strokeStyle = "#9ba7b3";
-    ctx.lineWidth = 4;
-
-    ctx.strokeRect(
-        table.x,
-        table.y,
-        table.width,
-        table.height
-    );
-
-    // Center display
-    ctx.fillStyle = "#1b222a";
-
-    ctx.fillRect(
-        table.x + 190,
-        table.y + 45,
-        120,
-        70
-    );
-
-    ctx.fillStyle = "#62d9ff";
-
-    ctx.font = "14px Arial";
-    ctx.textAlign = "center";
-
-    ctx.fillText(
-        "LAB MAP",
-        table.x + 250,
-        table.y + 85
-    );
-}
-
-/* =========================
-   DRAW CHAIRS
-========================= */
-
-function drawChairs(){
-
-    chairs.forEach(chair => {
-
-        ctx.fillStyle = "#3d4854";
-
-        ctx.fillRect(
-            chair.x,
-            chair.y,
-            60,
-            55
-        );
-
-        ctx.fillStyle = "#596674";
-
-        ctx.fillRect(
-            chair.x + 7,
-            chair.y + 7,
-            46,
-            35
-        );
-
-    });
-}
-
-/* =========================
-   RED BUTTON
-========================= */
-
-function drawButton(){
-
-    ctx.fillStyle = "#242a31";
-
-    ctx.fillRect(
-        redButton.x - 35,
-        redButton.y + 25,
-        70,
-        15
-    );
-
-    ctx.fillStyle =
-        redButton.pressed
-        ? "#58d66b"
-        : "#e53935";
-
-    ctx.beginPath();
-
-    ctx.arc(
-        redButton.x,
-        redButton.y,
-        25,
-        0,
-        Math.PI * 2
-    );
-
-    ctx.fill();
-
-    ctx.strokeStyle = "#111";
-    ctx.lineWidth = 4;
-    ctx.stroke();
-
-    ctx.fillStyle = "#fff";
-    ctx.font = "bold 10px Arial";
-    ctx.textAlign = "center";
-
-    ctx.fillText(
-        redButton.pressed ? "DONE" : "PRESS",
-        redButton.x,
-        redButton.y + 4
-    );
-}
-
-/* =========================
-   ALIEN CHARACTER
-========================= */
-
-function drawAlien(){
-
-    const x = player.x;
-    const y = player.y;
-
-    const moving =
-        keys["w"] ||
-        keys["a"] ||
-        keys["s"] ||
-        keys["d"] ||
-        keys["arrowup"] ||
-        keys["arrowdown"] ||
-        keys["arrowleft"] ||
-        keys["arrowright"];
-
-    const swing =
-        moving
-        ? Math.sin(player.walk) * 7
-        : 0;
-
-    /*
-       LEGS
-    */
-
-    ctx.strokeStyle = "#6fd32f";
-    ctx.lineWidth = 9;
-    ctx.lineCap = "round";
-
-    // Left leg
-    ctx.beginPath();
-
-    ctx.moveTo(
-        x - 9,
-        y + 23
-    );
-
-    ctx.lineTo(
-        x - 11 - swing,
-        y + 48
-    );
-
-    ctx.stroke();
-
-    // Right leg
-    ctx.beginPath();
-
-    ctx.moveTo(
-        x + 9,
-        y + 23
-    );
-
-    ctx.lineTo(
-        x + 11 + swing,
-        y + 48
-    );
-
-    ctx.stroke();
-
-    /*
-       FEET
-    */
-
-    ctx.lineWidth = 11;
-
-    ctx.beginPath();
-
-    ctx.moveTo(
-        x - 12 - swing,
-        y + 48
-    );
-
-    ctx.lineTo(
-        x - 20 - swing,
-        y + 48
-    );
-
-    ctx.stroke();
-
-    ctx.beginPath();
-
-    ctx.moveTo(
-        x + 12 + swing,
-        y + 48
-    );
-
-    ctx.lineTo(
-        x + 20 + swing,
-        y + 48
-    );
-
-    ctx.stroke();
-
-    /*
-       BODY
-    */
-
-    ctx.fillStyle = "#70d632";
-
-    ctx.fillRect(
-        x - 17,
-        y - 7,
-        34,
-        34
-    );
-
-    /*
-       ARMS
-    */
-
-    ctx.strokeStyle = "#70d632";
-    ctx.lineWidth = 9;
-
-    ctx.beginPath();
-
-    ctx.moveTo(
-        x - 17,
-        y
-    );
-
-    ctx.lineTo(
-        x - 28 + swing,
-        y + 20
-    );
-
-    ctx.stroke();
-
-    ctx.beginPath();
-
-    ctx.moveTo(
-        x + 17,
-        y
-    );
-
-    ctx.lineTo(
-        x + 28 - swing,
-        y + 20
-    );
-
-    ctx.stroke();
-
-    /*
-       HANDS
-    */
-
-    ctx.fillStyle = "#8ae54b";
-
-    ctx.beginPath();
-
-    ctx.arc(
-        x - 29 + swing,
-        y + 21,
-        7,
-        0,
-        Math.PI * 2
-    );
-
-    ctx.fill();
-
-    ctx.beginPath();
-
-    ctx.arc(
-        x + 29 - swing,
-        y + 21,
-        7,
-        0,
-        Math.PI * 2
-    );
-
-    ctx.fill();
-
-    /*
-       HEAD
-    */
-
-    ctx.fillStyle = "#8ae54b";
-
-    ctx.beginPath();
-
-    ctx.ellipse(
-        x,
-        y - 28,
-        25,
-        28,
-        0,
-        0,
-        Math.PI * 2
-    );
-
-    ctx.fill();
-
-    /*
-       EYES
-    */
-
-    ctx.fillStyle = "#111";
-
-    ctx.beginPath();
-
-    ctx.ellipse(
-        x - 9,
-        y - 30,
-        6,
-        10,
-        -0.2,
-        0,
-        Math.PI * 2
-    );
-
-    ctx.fill();
-
-    ctx.beginPath();
-
-    ctx.ellipse(
-        x + 9,
-        y - 30,
-        6,
-        10,
-        0.2,
-        0,
-        Math.PI * 2
-    );
-
-    ctx.fill();
-
-    /*
-       NAME
-    */
-
-    ctx.fillStyle = "#fff";
-    ctx.font = "bold 13px Arial";
-    ctx.textAlign = "center";
-
-    ctx.fillText(
-        "Alien",
-        x,
-        y - 65
-    );
-}
-
-/* =========================
-   INTERACTION
-========================= */
-
-addEventListener("keydown", e => {
-
-    if(e.key.toLowerCase() === "e"){
-
-        const distance = Math.hypot(
-            player.x - redButton.x,
-            player.y - redButton.y
-        );
-
-        if(distance < 80){
-
-            redButton.pressed = true;
-
-            alert(
-                "🔴 Red button pressed!"
-            );
-        }
-    }
 });
 
-/* =========================
-   GAME LOOP
-========================= */
 
-function gameLoop(){
+/* ================= MOBILE CONTROLS ================= */
 
-    movePlayer();
+function holdButton(button,down,up){
 
-    ctx.clearRect(
-        0,
-        0,
-        W,
-        H
-    );
+button.addEventListener("touchstart",e=>{
 
-    drawRoom();
-    drawTable();
-    drawChairs();
-    drawButton();
-    drawAlien();
+e.preventDefault();
 
-    requestAnimationFrame(
-        gameLoop
-    );
+down();
+
+},{passive:false});
+
+button.addEventListener("touchend",e=>{
+
+e.preventDefault();
+
+up();
+
+},{passive:false});
+
+button.addEventListener("touchcancel",()=>{
+
+up();
+
+});
+
+button.addEventListener("mousedown",()=>{
+
+down();
+
+});
+
+button.addEventListener("mouseup",()=>{
+
+up();
+
+});
+
+button.addEventListener("mouseleave",()=>{
+
+up();
+
+});
+
 }
 
-gameLoop();
+
+/* LEFT */
+
+holdButton(
+document.getElementById("leftBtn"),
+
+()=>{
+left=true;
+},
+
+()=>{
+left=false;
+}
+);
+
+
+/* RIGHT */
+
+holdButton(
+document.getElementById("rightBtn"),
+
+()=>{
+right=true;
+},
+
+()=>{
+right=false;
+}
+);
+
+
+/* JUMP */
+
+const jumpButton=
+document.getElementById("jumpBtn");
+
+jumpButton.addEventListener("touchstart",e=>{
+
+e.preventDefault();
+
+jump();
+
+},{passive:false});
+
+jumpButton.addEventListener("mousedown",()=>{
+
+jump();
+
+});
+
+
+/* ================= AUTO LANDSCAPE ================= */
+
+window.addEventListener("orientationchange",()=>{
+
+setTimeout(checkDevice,150);
+
+});
+
+
 </script>
+
+</body>
+</html>
