@@ -22,8 +22,59 @@ background:#071114;
 color:white;
 }
 
-body{touch-action:none}
-button{font-family:inherit;cursor:pointer}
+button{
+font-family:inherit;
+cursor:pointer;
+}
+
+/* MOBILE BLOCK */
+
+#mobileBlock{
+display:none;
+position:fixed;
+inset:0;
+z-index:999999;
+align-items:center;
+justify-content:center;
+text-align:center;
+padding:25px;
+background:
+radial-gradient(circle at 50% 30%,#1c4b52,#0b1c21 55%,#04090b);
+}
+
+.mobileBlockBox{
+width:100%;
+max-width:500px;
+padding:35px 25px;
+border:2px solid #ffd400;
+border-radius:24px;
+background:rgba(18,35,40,.97);
+box-shadow:0 20px 80px #000;
+}
+
+.mobileBlockIcon{
+font-size:65px;
+margin-bottom:10px;
+}
+
+.mobileBlockTitle{
+font-size:35px;
+font-weight:1000;
+color:#ffd400;
+}
+
+.mobileBlockText{
+margin-top:12px;
+font-size:17px;
+line-height:1.5;
+color:#b7c4c7;
+}
+
+.mobileBlockSmall{
+margin-top:20px;
+font-size:13px;
+color:#718287;
+}
 
 /* MAIN MENU */
 
@@ -34,7 +85,8 @@ z-index:10000;
 display:flex;
 align-items:center;
 justify-content:center;
-background:radial-gradient(circle at 50% 35%,#1c4b52,#0b1c21 55%,#04090b);
+background:
+radial-gradient(circle at 50% 35%,#1c4b52,#0b1c21 55%,#04090b);
 text-align:center;
 overflow:auto;
 }
@@ -50,7 +102,7 @@ box-shadow:0 20px 80px #000;
 }
 
 .menuLogo{
-font-size:58px;
+font-size:clamp(38px,6vw,58px);
 font-weight:1000;
 color:#ffd400;
 }
@@ -189,12 +241,23 @@ border-color:#ffd400;
 box-shadow:0 0 15px rgba(255,212,0,.4);
 }
 
-.skinEmoji{font-size:36px}
-.skinName{font-weight:900;margin-top:4px}
-.skinPrice{font-size:12px;color:#ffd400;margin-top:3px}
+.skinEmoji{
+font-size:36px;
+}
+
+.skinName{
+font-weight:900;
+margin-top:4px;
+}
+
+.skinPrice{
+font-size:12px;
+color:#ffd400;
+margin-top:3px;
+}
 
 #skinError{
-height:20px;
+min-height:20px;
 color:#ff6666;
 margin:8px;
 }
@@ -205,23 +268,23 @@ margin:8px;
 display:block;
 position:relative;
 margin:12px auto 0;
-width:55px;
+width:60px;
 height:42px;
 padding:0;
 border:1px solid #34474c;
 border-radius:9px;
 background:#111b1f;
-color:#8a999d;
+color:#ffd400;
 font-size:16px;
 font-weight:1000;
-opacity:.7;
+opacity:.9;
 z-index:50;
 }
 
 #adminButton:hover{
 opacity:1;
-color:#ffd400;
 border-color:#ffd400;
+box-shadow:0 0 12px rgba(255,212,0,.25);
 }
 
 #adminScreen{
@@ -314,7 +377,7 @@ width:100%;
 display:none;
 align-items:center;
 justify-content:space-between;
-padding:0 12px;
+padding:0 15px;
 background:#111d21;
 border-bottom:2px solid #ffd400;
 position:fixed;
@@ -354,7 +417,8 @@ top:58px;
 width:100%;
 height:calc(100vh - 58px);
 overflow:hidden;
-background:radial-gradient(circle at 50% 20%,#1c3d43,#0b191e 55%,#050b0d);
+background:
+radial-gradient(circle at 50% 20%,#1c3d43,#0b191e 55%,#050b0d);
 display:none;
 }
 
@@ -364,6 +428,7 @@ left:0;
 top:0;
 width:3000px;
 height:1500px;
+transform-origin:top left;
 }
 
 .light{
@@ -470,11 +535,15 @@ z-index:20;
 }
 
 @keyframes lavaFlow{
-0%{background-position:0 0,0 0,0 0,0 0}
-100%{background-position:180px 0,-240px 0,210px 0,0 0}
+0%{
+background-position:0 0,0 0,0 0,0 0
+}
+100%{
+background-position:180px 0,-240px 0,210px 0,0 0
+}
 }
 
-/* CHARACTER */
+/* PLAYER */
 
 #player{
 position:absolute;
@@ -559,8 +628,17 @@ background:#95603c;
 z-index:2;
 }
 
-#monkeyEarL,#chickenEarL,#zebraEarL{left:-4px}
-#monkeyEarR,#chickenEarR,#zebraEarR{right:-4px}
+#monkeyEarL,
+#chickenEarL,
+#zebraEarL{
+left:-4px;
+}
+
+#monkeyEarR,
+#chickenEarR,
+#zebraEarR{
+right:-4px;
+}
 
 /* COINS */
 
@@ -586,7 +664,9 @@ color:#806000;
 }
 
 @keyframes coinFloat{
-to{transform:translateY(-7px) rotate(8deg)}
+to{
+transform:translateY(-7px) rotate(8deg);
+}
 }
 
 /* HUD */
@@ -627,65 +707,6 @@ color:#ffd400;
 display:none;
 }
 
-/* MOBILE CONTROLS */
-
-#mobileControls{
-display:none;
-position:fixed;
-left:0;
-right:0;
-bottom:15px;
-z-index:9000;
-pointer-events:none;
-}
-
-.mobileRow{
-display:flex;
-justify-content:space-between;
-align-items:center;
-padding:0 15px;
-}
-
-.mobileGroup{
-display:flex;
-gap:10px;
-pointer-events:auto;
-}
-
-.mobileBtn{
-width:60px;
-height:60px;
-border:2px solid #ffd400;
-border-radius:15px;
-background:rgba(10,20,23,.88);
-color:#ffd400;
-font-size:25px;
-font-weight:1000;
-touch-action:none;
--webkit-tap-highlight-color:transparent;
-}
-
-.mobileBtn:active{
-background:#ffd400;
-color:#111;
-}
-
-/* PC = HIDDEN */
-
-@media (hover:hover) and (pointer:fine){
-#mobileControls{
-display:none !important;
-}
-}
-
-/* MOBILE = SHOWN */
-
-@media (hover:none) and (pointer:coarse){
-#mobileControls{
-display:block;
-}
-}
-
 /* MESSAGE */
 
 #message{
@@ -716,20 +737,55 @@ background:#ffd400;
 font-weight:900;
 }
 
-/* RESPONSIVE */
+/* RESPONSIVE PC */
 
-@media(max-width:799px){
+@media(max-width:1000px) and (min-width:701px){
 
-.skinGrid{
-grid-template-columns:repeat(3,1fr);
+.menuBox{
+max-width:580px;
+padding:30px 22px;
 }
 
+.skinGrid{
+grid-template-columns:repeat(5,1fr);
+}
+
+.finishText{
+font-size:34px;
+}
+
+#world{
+transform-origin:top left;
+}
+
+}
+
+/* SMALL PC / LAPTOP */
+
+@media(max-width:800px) and (min-width:701px){
+
 .menuLogo{
-font-size:42px;
+font-size:38px;
 }
 
 .menuSub{
 font-size:15px;
+}
+
+.panel{
+padding:18px;
+}
+
+.skinGrid{
+gap:6px;
+}
+
+.skinEmoji{
+font-size:30px;
+}
+
+.skinName{
+font-size:12px;
 }
 
 #topbar{
@@ -742,54 +798,44 @@ height:calc(100vh - 52px);
 }
 
 .finishText{
-font-size:30px;
-}
-
-.panel{
-padding:18px;
+font-size:28px;
 }
 
 }
+
+/* PHONE */
+
+@media(max-width:700px){
+
+#mobileBlock{
+display:flex !important;
+}
+
+#mainMenu,
+#characterScreen,
+#howScreen,
+#adminScreen,
+#topbar,
+#game,
+#message,
+#countdown,
+#lavaWarning,
+#roundText{
+display:none !important;
+}
+
+}
+
+/* EXTRA SMALL */
 
 @media(max-width:500px){
 
-#characterScreen,
-#howScreen{
-padding:8px;
+.mobileBlockTitle{
+font-size:28px;
 }
 
-.panel{
-max-height:98vh;
-padding:14px;
-}
-
-.panel h1{
-font-size:22px;
-}
-
-.skinEmoji{
-font-size:30px;
-}
-
-.skin{
-padding:8px 3px;
-}
-
-.skinName{
-font-size:12px;
-}
-
-.menuBox{
-padding:25px 15px;
-}
-
-.menuLogo{
-font-size:34px;
-}
-
-.mobileBtn{
-width:55px;
-height:55px;
+.mobileBlockText{
+font-size:15px;
 }
 
 }
@@ -798,12 +844,42 @@ height:55px;
 
 <body>
 
+<!-- MOBILE BLOCK -->
+
+<div id="mobileBlock">
+
+<div class="mobileBlockBox">
+
+<div class="mobileBlockIcon">🖥️</div>
+
+<div class="mobileBlockTitle">
+PC ONLY GAME
+</div>
+
+<div class="mobileBlockText">
+SleepyLabs is currently only available on PC and laptop.
+<br><br>
+Please open the game on a computer to play.
+</div>
+
+<div class="mobileBlockSmall">
+💻 Windows • Mac • Laptop • Desktop
+</div>
+
+</div>
+
+</div>
+
+
 <!-- MAIN MENU -->
 
 <div id="mainMenu">
+
 <div class="menuBox">
 
-<div class="menuLogo">🧪 SleepyLabs</div>
+<div class="menuLogo">
+🧪 SleepyLabs
+</div>
 
 <div class="menuSub">
 Escape the laboratory before the lava gets you 🌋
@@ -822,6 +898,7 @@ Made By SleepyBlocks
 </div>
 
 </div>
+
 </div>
 
 
@@ -916,6 +993,7 @@ AP
 </button>
 
 </div>
+
 </div>
 
 
@@ -931,7 +1009,6 @@ AP
 
 <li>🎮 <b>Move:</b> Use A/D or the arrow keys.</li>
 <li>⬆️ <b>Jump:</b> Press W, Space, or Up Arrow.</li>
-<li>📱 <b>Mobile:</b> Use the buttons on screen.</li>
 <li>🪙 <b>Collect:</b> Grab coins around the laboratory.</li>
 <li>🌋 <b>Watch out:</b> The lava rises while you play.</li>
 <li>🏁 <b>Goal:</b> Reach the green finish platform.</li>
@@ -948,6 +1025,7 @@ AP
 </button>
 
 </div>
+
 </div>
 
 
@@ -957,7 +1035,7 @@ AP
 
 <div class="adminPanel">
 
-<h1>⚙ ADMIN PANEL</h1>
+<h1>🛠 ADMIN PANEL</h1>
 
 <div class="adminSmall">
 SleepyLabs Administration
@@ -981,7 +1059,6 @@ CANCEL
 </button>
 
 </div>
-
 
 <div id="adminControls" style="display:none">
 
@@ -1020,6 +1097,7 @@ CLOSE ADMIN
 </div>
 
 </div>
+
 </div>
 
 
@@ -1039,6 +1117,7 @@ CLOSE ADMIN
 </button>
 
 </div>
+
 </div>
 
 <div id="countdown">15</div>
@@ -1183,44 +1262,15 @@ CLOSE ADMIN
 </div>
 
 
-<!-- MOBILE -->
-
-<div id="mobileControls">
-
-<div class="mobileRow">
-
-<div class="mobileGroup">
-
-<button class="mobileBtn" id="mobileLeft">
-◀
-</button>
-
-<button class="mobileBtn" id="mobileRight">
-▶
-</button>
-
-</div>
-
-<div class="mobileGroup">
-
-<button class="mobileBtn" id="mobileJump">
-⬆
-</button>
-
-</div>
-
-</div>
-
-</div>
-
-
 <!-- MESSAGE -->
 
 <div id="message">
 
 <div class="messageBox">
 
-<h1 id="messageTitle">💀 YOU LOST!</h1>
+<h1 id="messageTitle">
+💀 YOU LOST!
+</h1>
 
 <p id="messageText"></p>
 
@@ -1235,28 +1285,71 @@ CLOSE ADMIN
 
 <script>
 
-/* PLAYER ID */
+/* DEVICE CHECK */
+
+function isMobileDevice(){
+
+return window.matchMedia(
+"(hover:none) and (pointer:coarse)"
+).matches;
+
+}
+
+function blockMobile(){
+
+if(isMobileDevice()){
+
+document.getElementById("mobileBlock")
+.style.display="flex";
+
+document.getElementById("mainMenu")
+.style.display="none";
+
+}
+
+}
+
+blockMobile();
+
+window.addEventListener("resize",blockMobile);
+
+
+/* ADMIN */
 
 const ADMIN_ID="SleepyBlocks";
 const ADMIN_PASSWORD="sleepylabs";
 
+
+/* PLAYER ID */
+
 function createPlayerID(){
 
-let saved=localStorage.getItem("sleepyLabsPlayerID");
+let saved=
+localStorage.getItem("sleepyLabsPlayerID");
 
 if(saved)return saved;
 
 const randomPart=
-Math.random().toString(36).substring(2,8).toUpperCase();
+Math.random()
+.toString(36)
+.substring(2,8)
+.toUpperCase();
 
 const timePart=
-Date.now().toString(36).toUpperCase();
+Date.now()
+.toString(36)
+.toUpperCase();
 
-const id="SL-"+timePart+"-"+randomPart;
+const id=
+"SL-"+timePart+"-"+randomPart;
 
-localStorage.setItem("sleepyLabsPlayerID",id);
+localStorage.setItem(
+"sleepyLabsPlayerID",
+id
+);
 
 return id;
+
 }
 
 let playerID=createPlayerID();
@@ -1270,7 +1363,8 @@ const text=playerID;
 
 if(navigator.clipboard){
 
-navigator.clipboard.writeText(text)
+navigator.clipboard
+.writeText(text)
 .then(showCopyMessage)
 .catch(()=>fallbackCopy(text));
 
@@ -1284,7 +1378,8 @@ fallbackCopy(text);
 
 function fallbackCopy(text){
 
-const temp=document.createElement("textarea");
+const temp=
+document.createElement("textarea");
 
 temp.value=text;
 
@@ -1302,13 +1397,18 @@ showCopyMessage();
 
 function showCopyMessage(){
 
-const error=document.getElementById("skinError");
+const error=
+document.getElementById("skinError");
+
 const old=error.textContent;
 
-error.textContent="✅ Player ID copied!";
+error.textContent=
+"✅ Player ID copied!";
 
 setTimeout(()=>{
+
 error.textContent=old;
+
 },1800);
 
 }
@@ -1316,9 +1416,14 @@ error.textContent=old;
 
 /* GAME VARIABLES */
 
-const world=document.getElementById("world");
-const player=document.getElementById("player");
-const lava=document.getElementById("lava");
+const world=
+document.getElementById("world");
+
+const player=
+document.getElementById("player");
+
+const lava=
+document.getElementById("lava");
 
 let platforms=[];
 let coins=[];
@@ -1336,7 +1441,9 @@ let started=false;
 let dead=false;
 
 let score=Number(
-localStorage.getItem("sleepyLabsCoins_"+playerID)||0
+localStorage.getItem(
+"sleepyLabsCoins_"+playerID
+)||0
 );
 
 let selectedSkin="boy";
@@ -1358,9 +1465,14 @@ localStorage.setItem(
 String(score)
 );
 
-document.getElementById("coinText").textContent=score;
-document.getElementById("mainCoinText").textContent=score;
-document.getElementById("skinCoinText").textContent=score;
+document.getElementById("coinText")
+.textContent=score;
+
+document.getElementById("mainCoinText")
+.textContent=score;
+
+document.getElementById("skinCoinText")
+.textContent=score;
 
 }
 
@@ -1369,9 +1481,16 @@ document.getElementById("skinCoinText").textContent=score;
 
 function openCharacterScreen(){
 
-document.getElementById("mainMenu").style.display="none";
-document.getElementById("howScreen").style.display="none";
-document.getElementById("characterScreen").style.display="flex";
+if(isMobileDevice())return;
+
+document.getElementById("mainMenu")
+.style.display="none";
+
+document.getElementById("howScreen")
+.style.display="none";
+
+document.getElementById("characterScreen")
+.style.display="flex";
 
 updateCoins();
 
@@ -1379,19 +1498,25 @@ updateCoins();
 
 function backToCharacter(){
 
-document.getElementById("howScreen").style.display="none";
-document.getElementById("characterScreen").style.display="flex";
+document.getElementById("howScreen")
+.style.display="none";
+
+document.getElementById("characterScreen")
+.style.display="flex";
 
 }
 
 function openHowToPlayFromCharacter(){
 
 const name=
-document.getElementById("nameInput").value.trim();
+document.getElementById("nameInput")
+.value
+.trim();
 
 if(!name){
 
-document.getElementById("skinError").textContent=
+document.getElementById("skinError")
+.textContent=
 "Enter your name first!";
 
 return;
@@ -1400,10 +1525,14 @@ return;
 
 playerName=name;
 
-document.getElementById("skinError").textContent="";
+document.getElementById("skinError")
+.textContent="";
 
-document.getElementById("characterScreen").style.display="none";
-document.getElementById("howScreen").style.display="flex";
+document.getElementById("characterScreen")
+.style.display="none";
+
+document.getElementById("howScreen")
+.style.display="flex";
 
 }
 
@@ -1416,7 +1545,8 @@ try{
 
 if(document.documentElement.requestFullscreen){
 
-await document.documentElement.requestFullscreen();
+await document.documentElement
+.requestFullscreen();
 
 }
 
@@ -1429,36 +1559,37 @@ await document.documentElement.requestFullscreen();
 
 function enterGame(){
 
+if(isMobileDevice())return;
+
 lockFullscreen();
 
-document.getElementById("howScreen").style.display="none";
-document.getElementById("characterScreen").style.display="none";
-document.getElementById("mainMenu").style.display="none";
+document.getElementById("howScreen")
+.style.display="none";
+
+document.getElementById("characterScreen")
+.style.display="none";
+
+document.getElementById("mainMenu")
+.style.display="none";
 
 playerName=
-document.getElementById("nameInput").value.trim()||playerName;
+document.getElementById("nameInput")
+.value
+.trim()||playerName;
 
-document.getElementById("nameTag").textContent=playerName;
+document.getElementById("nameTag")
+.textContent=playerName;
 
 applySkin();
 
-document.getElementById("topbar").style.display="flex";
-document.getElementById("roundText").style.display="block";
-document.getElementById("game").style.display="block";
+document.getElementById("topbar")
+.style.display="flex";
 
-if(
-window.matchMedia("(hover:none) and (pointer:coarse)").matches
-){
-
-document.getElementById("mobileControls")
+document.getElementById("roundText")
 .style.display="block";
 
-}else{
-
-document.getElementById("mobileControls")
-.style.display="none";
-
-}
+document.getElementById("game")
+.style.display="block";
 
 started=true;
 dead=false;
@@ -1478,11 +1609,13 @@ requestAnimationFrame(loop);
 
 function selectSkin(button){
 
-const price=Number(button.dataset.price);
+const price=
+Number(button.dataset.price);
 
 if(price>0 && score<price){
 
-document.getElementById("skinError").textContent=
+document.getElementById("skinError")
+.textContent=
 "❌ You need "+price+" coins!";
 
 return;
@@ -1491,25 +1624,36 @@ return;
 
 document
 .querySelectorAll(".skin")
-.forEach(s=>s.classList.remove("selected"));
+.forEach(s=>
+s.classList.remove("selected")
+);
 
 button.classList.add("selected");
 
-selectedSkin=button.dataset.skin;
+selectedSkin=
+button.dataset.skin;
 
-document.getElementById("skinError").textContent="";
+document.getElementById("skinError")
+.textContent="";
 
 }
 
 function applySkin(){
 
-const head=document.getElementById("head");
-const body=document.getElementById("body");
-const crown=document.getElementById("crown");
+const head=
+document.getElementById("head");
+
+const body=
+document.getElementById("body");
+
+const crown=
+document.getElementById("crown");
 
 document
 .querySelectorAll(".animalEar")
-.forEach(e=>e.style.display="none");
+.forEach(e=>
+e.style.display="none"
+);
 
 if(selectedSkin==="boy"){
 
@@ -1533,8 +1677,11 @@ head.style.background="#95603c";
 body.style.background="#714425";
 crown.style.display="none";
 
-document.getElementById("monkeyEarL").style.display="block";
-document.getElementById("monkeyEarR").style.display="block";
+document.getElementById("monkeyEarL")
+.style.display="block";
+
+document.getElementById("monkeyEarR")
+.style.display="block";
 
 }
 
@@ -1544,8 +1691,11 @@ head.style.background="#fff0a0";
 body.style.background="#e4c52f";
 crown.style.display="none";
 
-document.getElementById("chickenEarL").style.display="block";
-document.getElementById("chickenEarR").style.display="block";
+document.getElementById("chickenEarL")
+.style.display="block";
+
+document.getElementById("chickenEarR")
+.style.display="block";
 
 }
 
@@ -1555,8 +1705,11 @@ head.style.background="#eee";
 body.style.background="#222";
 crown.style.display="none";
 
-document.getElementById("zebraEarL").style.display="block";
-document.getElementById("zebraEarR").style.display="block";
+document.getElementById("zebraEarL")
+.style.display="block";
+
+document.getElementById("zebraEarR")
+.style.display="block";
 
 }
 
@@ -1568,9 +1721,11 @@ document.getElementById("zebraEarR").style.display="block";
 function updateObjects(){
 
 let selector=
-round===1?".platform.r1":
-round===2?".platform.r2":
-".platform.r3";
+round===1
+?".platform.r1"
+:round===2
+?".platform.r2"
+:".platform.r3";
 
 platforms=[
 ...document.querySelectorAll(selector)
@@ -1578,9 +1733,11 @@ platforms=[
 
 coins=[
 ...document.querySelectorAll(
-round===1?".coin.r1":
-round===2?".coin.r2":
-".coin.r3"
+round===1
+?".coin.r1"
+:round===2
+?".coin.r2"
+:".coin.r3"
 )
 ];
 
@@ -1593,7 +1750,8 @@ updateObjects();
 const first=platforms[0];
 
 const platformBottom=
-world.offsetHeight-first.offsetTop;
+world.offsetHeight-
+first.offsetTop;
 
 x=first.offsetLeft+30;
 y=platformBottom;
@@ -1616,15 +1774,24 @@ player.style.bottom=y+"px";
 
 function camera(){
 
-const screenWidth=window.innerWidth;
+const screenWidth=
+document.getElementById("game")
+.clientWidth;
 
-let target=x-screenWidth/2+24;
+let target=
+x-screenWidth/2+24;
 
 const maxCamera=
-Math.max(0,world.offsetWidth-screenWidth);
+Math.max(
+0,
+world.offsetWidth-screenWidth
+);
 
 target=
-Math.max(0,Math.min(target,maxCamera));
+Math.max(
+0,
+Math.min(target,maxCamera)
+);
 
 world.style.transform=
 `translateX(${-target}px)`;
@@ -1633,34 +1800,56 @@ world.style.transform=
 
 function showRound(number){
 
-document.querySelectorAll(".r1")
-.forEach(el=>el.style.display=number===1?"block":"none");
+document
+.querySelectorAll(".r1")
+.forEach(el=>
+el.style.display=
+number===1?"block":"none"
+);
 
-document.querySelectorAll(".r2")
-.forEach(el=>el.style.display=number===2?"block":"none");
+document
+.querySelectorAll(".r2")
+.forEach(el=>
+el.style.display=
+number===2?"block":"none"
+);
 
-document.querySelectorAll(".r3")
-.forEach(el=>el.style.display=number===3?"block":"none");
+document
+.querySelectorAll(".r3")
+.forEach(el=>
+el.style.display=
+number===3?"block":"none"
+);
 
-document.querySelectorAll(".finish")
-.forEach(el=>el.style.display="none");
+document
+.querySelectorAll(".finish")
+.forEach(el=>
+el.style.display="none"
+);
 
-document.querySelector(".f"+number)
-.style.display="block";
+const finish=
+document.querySelector(".f"+number);
+
+if(finish)
+finish.style.display="block";
 
 document.getElementById("roundText")
-.textContent="STAGE "+number;
+.textContent=
+"STAGE "+number;
 
 }
 
 function resetStageCoins(number){
 
 const selector=
-number===1?".coin.r1":
-number===2?".coin.r2":
-".coin.r3";
+number===1
+?".coin.r1"
+:number===2
+?".coin.r2"
+:".coin.r3";
 
-document.querySelectorAll(selector)
+document
+.querySelectorAll(selector)
 .forEach(coin=>{
 coin.style.display="block";
 });
@@ -1681,8 +1870,11 @@ timer=seconds;
 
 lava.style.height="55px";
 
-const countdown=document.getElementById("countdown");
-const warning=document.getElementById("lavaWarning");
+const countdown=
+document.getElementById("countdown");
+
+const warning=
+document.getElementById("lavaWarning");
 
 countdown.style.display="block";
 warning.style.display="block";
@@ -1697,7 +1889,10 @@ function rise(now){
 if(dead)return;
 
 const progress=
-Math.min(1,(now-start)/(seconds*1000));
+Math.min(
+1,
+(now-start)/(seconds*1000)
+);
 
 lava.style.height=
 (55+progress*900)+"px";
@@ -1711,13 +1906,18 @@ requestAnimationFrame(rise);
 
 }
 
-lavaAnimation=requestAnimationFrame(rise);
+lavaAnimation=
+requestAnimationFrame(rise);
 
-timerInterval=setInterval(()=>{
+timerInterval=
+setInterval(()=>{
+
+if(dead)return;
 
 timer--;
 
-countdown.textContent=Math.max(0,timer);
+countdown.textContent=
+Math.max(0,timer);
 
 if(timer<=5)
 countdown.style.color="#ff3030";
@@ -1757,11 +1957,16 @@ const p=playerRect();
 
 for(const platform of platforms){
 
-const leftEdge=platform.offsetLeft;
-const rightEdge=leftEdge+platform.offsetWidth;
+const leftEdge=
+platform.offsetLeft;
+
+const rightEdge=
+leftEdge+
+platform.offsetWidth;
 
 const platformBottom=
-world.offsetHeight-platform.offsetTop;
+world.offsetHeight-
+platform.offsetTop;
 
 if(
 vy<=0 &&
@@ -1782,7 +1987,7 @@ grounded=true;
 }
 
 
-/* COLLECT COINS */
+/* COINS */
 
 function collectCoins(){
 
@@ -1793,8 +1998,12 @@ coins.forEach(coin=>{
 if(coin.style.display==="none")
 return;
 
-const leftEdge=coin.offsetLeft;
-const rightEdge=leftEdge+coin.offsetWidth;
+const leftEdge=
+coin.offsetLeft;
+
+const rightEdge=
+leftEdge+
+coin.offsetWidth;
 
 const bottom=
 world.offsetHeight-
@@ -1802,7 +2011,8 @@ coin.offsetTop-
 coin.offsetHeight;
 
 const top=
-world.offsetHeight-coin.offsetTop;
+world.offsetHeight-
+coin.offsetTop;
 
 if(
 p.right>leftEdge &&
@@ -1833,8 +2043,11 @@ return;
 
 const speed=.95;
 
-if(left)vx-=speed;
-if(right)vx+=speed;
+if(left)
+vx-=speed;
+
+if(right)
+vx+=speed;
 
 vx*=.82;
 
@@ -1847,13 +2060,16 @@ grounded=false;
 
 platformCollision();
 
-if(x<0)x=0;
+if(x<0)
+x=0;
 
 if(x>world.offsetWidth-48)
 x=world.offsetWidth-48;
 
 const lavaHeight=
-parseInt(getComputedStyle(lava).height);
+parseInt(
+getComputedStyle(lava).height
+);
 
 if(y<=lavaHeight){
 
@@ -1865,7 +2081,8 @@ return;
 
 collectCoins();
 
-let finishX,finishY;
+let finishX;
+let finishY;
 
 if(round===1){
 
@@ -1927,51 +2144,64 @@ clearInterval(timerInterval);
 if(lavaAnimation)
 cancelAnimationFrame(lavaAnimation);
 
-document.getElementById("countdown").style.display="none";
-document.getElementById("lavaWarning").style.display="none";
+document.getElementById("countdown")
+.style.display="none";
+
+document.getElementById("lavaWarning")
+.style.display="none";
 
 dead=true;
 
 if(round===1){
 
 document.getElementById("messageTitle")
-.textContent="🚀 STAGE 1 COMPLETE!";
+.textContent=
+"🚀 STAGE 1 COMPLETE!";
 
 document.getElementById("messageText")
-.textContent="Ready for Stage 2?";
+.textContent=
+"Ready for Stage 2?";
 
 document.getElementById("messageButton")
-.textContent="🚀 STAGE 2";
+.textContent=
+"🚀 STAGE 2";
 
 }
 
 else if(round===2){
 
 document.getElementById("messageTitle")
-.textContent="🔥 STAGE 2 COMPLETE!";
+.textContent=
+"🔥 STAGE 2 COMPLETE!";
 
 document.getElementById("messageText")
-.textContent="Ready for Stage 3?";
+.textContent=
+"Ready for Stage 3?";
 
 document.getElementById("messageButton")
-.textContent="🚀 STAGE 3";
+.textContent=
+"🚀 STAGE 3";
 
 }
 
 else{
 
 document.getElementById("messageTitle")
-.textContent="🏆 YOU WIN!";
+.textContent=
+"🏆 YOU WIN!";
 
 document.getElementById("messageText")
-.textContent="You escaped SleepyLabs!";
+.textContent=
+"You escaped SleepyLabs!";
 
 document.getElementById("messageButton")
-.textContent="🏠 CHARACTER PAGE";
+.textContent=
+"🏠 CHARACTER PAGE";
 
 }
 
-document.getElementById("message").style.display="flex";
+document.getElementById("message")
+.style.display="flex";
 
 }
 
@@ -1983,9 +2213,11 @@ function messageAction(){
 if(round<3){
 
 round++;
+
 dead=false;
 
-document.getElementById("message").style.display="none";
+document.getElementById("message")
+.style.display="none";
 
 resetStageCoins(round);
 showRound(round);
@@ -2015,19 +2247,30 @@ cancelAnimationFrame(lavaAnimation);
 started=false;
 dead=false;
 
-document.getElementById("message").style.display="none";
-document.getElementById("game").style.display="none";
-document.getElementById("topbar").style.display="none";
-document.getElementById("roundText").style.display="none";
-document.getElementById("countdown").style.display="none";
-document.getElementById("lavaWarning").style.display="none";
-document.getElementById("mobileControls").style.display="none";
+document.getElementById("message")
+.style.display="none";
+
+document.getElementById("game")
+.style.display="none";
+
+document.getElementById("topbar")
+.style.display="none";
+
+document.getElementById("roundText")
+.style.display="none";
+
+document.getElementById("countdown")
+.style.display="none";
+
+document.getElementById("lavaWarning")
+.style.display="none";
 
 round=1;
 
 showRound(1);
 
-document.getElementById("characterScreen").style.display="flex";
+document.getElementById("characterScreen")
+.style.display="flex";
 
 updateCoins();
 
@@ -2048,24 +2291,37 @@ clearInterval(timerInterval);
 if(lavaAnimation)
 cancelAnimationFrame(lavaAnimation);
 
-document.getElementById("countdown").style.display="none";
-document.getElementById("lavaWarning").style.display="none";
+document.getElementById("countdown")
+.style.display="none";
+
+document.getElementById("lavaWarning")
+.style.display="none";
 
 updateCoins();
 
 setTimeout(()=>{
 
+/*
+IMPORTANT:
+Always reset to Stage 1 when dead.
+*/
+
+round=1;
+
 document.getElementById("messageTitle")
-.textContent="💀 YOU LOST!";
+.textContent=
+"💀 YOU LOST!";
 
 document.getElementById("messageText")
 .textContent=
 reason+" You respawn at Stage 1.";
 
 document.getElementById("messageButton")
-.textContent="🔄 STAGE 1";
+.textContent=
+"🔄 STAGE 1";
 
-document.getElementById("message").style.display="flex";
+document.getElementById("message")
+.style.display="flex";
 
 },200);
 
@@ -2076,7 +2332,8 @@ document.getElementById("message").style.display="flex";
 
 function restart(){
 
-document.getElementById("message").style.display="none";
+document.getElementById("message")
+.style.display="none";
 
 round=1;
 dead=false;
@@ -2100,18 +2357,29 @@ requestAnimationFrame(loop);
 
 function openAdminLogin(){
 
-document.getElementById("adminScreen").style.display="flex";
+if(isMobileDevice())
+return;
 
-document.getElementById("adminLoginArea").style.display="block";
+document.getElementById("adminScreen")
+.style.display="flex";
 
-document.getElementById("adminControls").style.display="none";
+document.getElementById("adminLoginArea")
+.style.display="block";
 
-document.getElementById("adminPassword").value="";
+document.getElementById("adminControls")
+.style.display="none";
 
-document.getElementById("adminResult").textContent="";
+document.getElementById("adminPassword")
+.value="";
+
+document.getElementById("adminResult")
+.textContent="";
 
 setTimeout(()=>{
-document.getElementById("adminPassword").focus();
+
+document.getElementById("adminPassword")
+.focus();
+
 },100);
 
 }
@@ -2121,22 +2389,24 @@ document.getElementById("adminPassword").focus();
 
 function closeAdmin(){
 
-document.getElementById("adminScreen").style.display="none";
+document.getElementById("adminScreen")
+.style.display="none";
 
 }
 
 
-/* CHECK PASSWORD */
+/* PASSWORD */
 
 function checkAdminPassword(){
 
 const entered=
 document.getElementById("adminPassword")
 .value
-.trim()
-.toLowerCase();
+.trim();
 
-if(entered===ADMIN_PASSWORD.toLowerCase()){
+if(
+entered===ADMIN_PASSWORD
+){
 
 document.getElementById("adminLoginArea")
 .style.display="none";
@@ -2166,7 +2436,9 @@ document.getElementById("adminResult")
 function getPlayerCoins(id){
 
 return Number(
-localStorage.getItem("sleepyLabsCoins_"+id)||0
+localStorage.getItem(
+"sleepyLabsCoins_"+id
+)||0
 );
 
 }
@@ -2184,11 +2456,13 @@ function giveCoins(){
 
 const target=
 document.getElementById("targetPlayer")
-.value.trim();
+.value
+.trim();
 
 const amount=
 Number(
-document.getElementById("coinAmount").value
+document.getElementById("coinAmount")
+.value
 );
 
 if(!target){
@@ -2214,12 +2488,17 @@ return;
 
 }
 
-const oldCoins=getPlayerCoins(target);
+const oldCoins=
+getPlayerCoins(target);
 
 const newCoins=
-oldCoins+Math.floor(amount);
+oldCoins+
+Math.floor(amount);
 
-setPlayerCoins(target,newCoins);
+setPlayerCoins(
+target,
+newCoins
+);
 
 document.getElementById("adminResult")
 .textContent=
@@ -2251,7 +2530,8 @@ i<localStorage.length;
 i++
 ){
 
-const key=localStorage.key(i);
+const key=
+localStorage.key(i);
 
 if(
 key &&
@@ -2259,7 +2539,10 @@ key.startsWith("sleepyLabsCoins_")
 ){
 
 ids.push(
-key.replace("sleepyLabsCoins_","")
+key.replace(
+"sleepyLabsCoins_",
+""
+)
 );
 
 }
@@ -2269,7 +2552,7 @@ key.replace("sleepyLabsCoins_","")
 if(!ids.length){
 
 list.textContent=
-"No other players saved on this device.";
+"No players saved on this device.";
 
 return;
 
@@ -2278,7 +2561,10 @@ return;
 list.innerHTML=
 "<b style='color:#ffd400'>Saved Player IDs:</b><br><br>"+
 ids.map(id=>
-id+" — "+getPlayerCoins(id)+" 🪙"
+id+
+" — "+
+getPlayerCoins(id)+
+" 🪙"
 ).join("<br>");
 
 }
@@ -2286,21 +2572,33 @@ id+" — "+getPlayerCoins(id)+" 🪙"
 
 /* KEYBOARD */
 
-document.addEventListener("keydown",e=>{
+document.addEventListener(
+"keydown",
+e=>{
 
-const key=e.key.toLowerCase();
+if(isMobileDevice())
+return;
+
+const key=
+e.key.toLowerCase();
 
 if(
 key==="a"||
 key==="arrowleft"
-)
+){
+
 left=true;
+
+}
 
 if(
 key==="d"||
 key==="arrowright"
-)
+){
+
 right=true;
+
+}
 
 if(
 key==="w"||
@@ -2313,126 +2611,39 @@ jump();
 
 }
 
-});
+}
+);
 
-document.addEventListener("keyup",e=>{
+document.addEventListener(
+"keyup",
+e=>{
 
-const key=e.key.toLowerCase();
+if(isMobileDevice())
+return;
+
+const key=
+e.key.toLowerCase();
 
 if(
 key==="a"||
 key==="arrowleft"
-)
+){
+
 left=false;
+
+}
 
 if(
 key==="d"||
 key==="arrowright"
-)
+){
+
 right=false;
 
-});
-
-
-/* MOBILE CONTROLS */
-
-function setupMobileButton(id,down,up){
-
-const button=document.getElementById(id);
-
-button.addEventListener(
-"touchstart",
-e=>{
-e.preventDefault();
-down();
-},
-{passive:false}
-);
-
-button.addEventListener(
-"touchend",
-e=>{
-e.preventDefault();
-up();
-},
-{passive:false}
-);
-
-button.addEventListener(
-"touchcancel",
-e=>{
-e.preventDefault();
-up();
-},
-{passive:false}
-);
-
-button.addEventListener(
-"mousedown",
-e=>{
-e.preventDefault();
-down();
-}
-);
-
-button.addEventListener(
-"mouseup",
-e=>{
-e.preventDefault();
-up();
-}
-);
-
-button.addEventListener(
-"mouseleave",
-e=>{
-up();
-}
-);
-
 }
 
-setupMobileButton(
-"mobileLeft",
-()=>left=true,
-()=>left=false
-);
-
-setupMobileButton(
-"mobileRight",
-()=>right=true,
-()=>right=false
-);
-
-const jumpButton=
-document.getElementById("mobileJump");
-
-jumpButton.addEventListener(
-"touchstart",
-e=>{
-e.preventDefault();
-jump();
-},
-{passive:false}
-);
-
-jumpButton.addEventListener(
-"mousedown",
-e=>{
-e.preventDefault();
-jump();
 }
 );
-
-
-/* RESIZE */
-
-window.addEventListener("resize",()=>{
-
-if(started)
-camera();
-
-});
 
 
 /* STARTUP */
