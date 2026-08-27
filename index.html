@@ -6,12 +6,26 @@
 <title>SleepyLabs Obby</title>
 
 <style>
-*{box-sizing:border-box;user-select:none;-webkit-user-select:none}
-html,body{
-margin:0;width:100%;height:100%;overflow:hidden;
-font-family:Arial,sans-serif;background:#071114;color:white
+*{
+box-sizing:border-box;
+user-select:none;
+-webkit-user-select:none;
 }
+
+html,body{
+margin:0;
+width:100%;
+height:100%;
+overflow:hidden;
+font-family:Arial,sans-serif;
+background:#071114;
+color:white;
+}
+
+body{touch-action:none}
 button{font-family:inherit;cursor:pointer}
+
+/* MAIN MENU */
 
 #mainMenu{
 position:fixed;
@@ -21,7 +35,8 @@ display:flex;
 align-items:center;
 justify-content:center;
 background:radial-gradient(circle at 50% 35%,#1c4b52,#0b1c21 55%,#04090b);
-text-align:center
+text-align:center;
+overflow:auto;
 }
 
 .menuBox{
@@ -31,19 +46,19 @@ padding:40px 25px;
 border:2px solid #ffd400;
 border-radius:25px;
 background:rgba(18,35,40,.95);
-box-shadow:0 20px 80px #000
+box-shadow:0 20px 80px #000;
 }
 
 .menuLogo{
 font-size:58px;
 font-weight:1000;
-color:#ffd400
+color:#ffd400;
 }
 
 .menuSub{
 font-size:18px;
 color:#aebabc;
-margin:10px 0 25px
+margin:10px 0 25px;
 }
 
 .menuCoins{
@@ -53,7 +68,7 @@ border-radius:10px;
 background:#0b1417;
 border:1px solid #34474c;
 font-weight:900;
-margin-bottom:25px
+margin-bottom:15px;
 }
 
 .menuButton{
@@ -67,20 +82,22 @@ border-radius:13px;
 background:#ffd400;
 color:#111;
 font-size:20px;
-font-weight:1000
+font-weight:1000;
 }
 
 .menuButton.secondary{
 background:#202f34;
-color:white
+color:white;
 }
 
 .credit{
 margin-top:25px;
 color:#7f9297;
 font-size:13px;
-font-weight:900
+font-weight:900;
 }
+
+/* CHARACTER */
 
 #characterScreen,
 #howScreen{
@@ -91,7 +108,8 @@ z-index:9000;
 align-items:center;
 justify-content:center;
 padding:20px;
-background:radial-gradient(circle,#183c42,#061014 70%)
+background:radial-gradient(circle,#183c42,#061014 70%);
+overflow:auto;
 }
 
 .panel{
@@ -101,35 +119,61 @@ padding:25px;
 border:2px solid #ffd400;
 border-radius:22px;
 background:#152328;
-text-align:center
+text-align:center;
+max-height:95vh;
+overflow:auto;
 }
 
 .panel h1{
 color:#ffd400;
-margin:5px 0 15px
-}
-
-.panel p{
-color:#b9c5c8;
-line-height:1.5
+margin:5px 0 15px;
 }
 
 #nameInput{
 width:100%;
 max-width:350px;
 padding:13px;
-margin:15px 0;
+margin:10px 0 15px;
 border:2px solid #405157;
 border-radius:10px;
 background:#0a1417;
 color:white;
-outline:none
+outline:none;
+}
+
+.playerIDBox{
+margin:0 auto 8px;
+padding:10px 15px;
+max-width:350px;
+background:#0b1417;
+border:1px solid #34474c;
+border-radius:10px;
+font-size:13px;
+color:#aebabc;
+}
+
+.playerIDBox b{
+color:#ffd400;
+word-break:break-all;
+}
+
+.copyID{
+display:block;
+width:100%;
+max-width:350px;
+margin:8px auto 15px;
+padding:11px;
+border:0;
+border-radius:10px;
+background:#29383d;
+color:white;
+font-weight:900;
 }
 
 .skinGrid{
 display:grid;
 grid-template-columns:repeat(5,1fr);
-gap:9px
+gap:9px;
 }
 
 .skin{
@@ -137,12 +181,12 @@ padding:11px 4px;
 border:2px solid #34474c;
 border-radius:13px;
 background:#202e33;
-color:white
+color:white;
 }
 
 .skin.selected{
 border-color:#ffd400;
-box-shadow:0 0 15px rgba(255,212,0,.4)
+box-shadow:0 0 15px rgba(255,212,0,.4);
 }
 
 .skinEmoji{font-size:36px}
@@ -152,70 +196,166 @@ box-shadow:0 0 15px rgba(255,212,0,.4)
 #skinError{
 height:20px;
 color:#ff6666;
-margin:8px
+margin:8px;
 }
 
-#howList{
-text-align:left;
-max-width:500px;
-margin:20px auto;
+/* ADMIN */
+
+#adminButton{
+display:block;
+position:relative;
+margin:12px auto 0;
+width:55px;
+height:42px;
 padding:0;
-list-style:none
+border:1px solid #34474c;
+border-radius:9px;
+background:#111b1f;
+color:#8a999d;
+font-size:16px;
+font-weight:1000;
+opacity:.7;
+z-index:50;
 }
 
-#howList li{
-margin:10px 0;
-padding:13px;
-background:#202f34;
-border-radius:10px
+#adminButton:hover{
+opacity:1;
+color:#ffd400;
+border-color:#ffd400;
 }
 
-#game{
-position:absolute;
-left:0;
-top:64px;
+#adminScreen{
+display:none;
+position:fixed;
+inset:0;
+z-index:20000;
+align-items:center;
+justify-content:center;
+background:rgba(0,0,0,.88);
+padding:20px;
+}
+
+.adminPanel{
 width:100%;
-height:calc(100vh - 64px);
-overflow:hidden;
-background:radial-gradient(circle at 50% 20%,#1c3d43,#0b191e 55%,#050b0d);
-display:none
+max-width:500px;
+max-height:90vh;
+overflow:auto;
+padding:25px;
+background:#142126;
+border:2px solid #ffd400;
+border-radius:20px;
+box-shadow:0 20px 80px #000;
 }
+
+.adminPanel h1{
+margin:0 0 5px;
+color:#ffd400;
+text-align:center;
+}
+
+.adminSmall{
+text-align:center;
+color:#84959a;
+font-size:12px;
+margin-bottom:20px;
+}
+
+.adminInput{
+width:100%;
+padding:13px;
+margin:7px 0;
+border-radius:9px;
+border:1px solid #405157;
+background:#091316;
+color:white;
+outline:none;
+}
+
+.adminAction{
+width:100%;
+padding:13px;
+margin-top:8px;
+border:0;
+border-radius:9px;
+background:#ffd400;
+color:#111;
+font-weight:1000;
+}
+
+.adminClose{
+background:#29383d;
+color:white;
+}
+
+#adminResult{
+min-height:20px;
+margin-top:12px;
+text-align:center;
+font-size:13px;
+font-weight:900;
+}
+
+.adminPlayerList{
+margin-top:18px;
+max-height:150px;
+overflow:auto;
+background:#0b1417;
+border-radius:10px;
+padding:10px;
+font-size:12px;
+color:#9eafb3;
+}
+
+/* TOP BAR */
 
 #topbar{
-height:64px;
+height:58px;
 width:100%;
 display:none;
 align-items:center;
 justify-content:space-between;
-padding:0 18px;
+padding:0 12px;
 background:#111d21;
 border-bottom:2px solid #ffd400;
 position:fixed;
 top:0;
 left:0;
-z-index:5000
+z-index:5000;
 }
 
 .logo{
-font-size:21px;
+font-size:20px;
 font-weight:900;
-color:#ffd400
+color:#ffd400;
 }
 
 .stats{
 display:flex;
 align-items:center;
 gap:8px;
-font-weight:900
+font-weight:900;
 }
 
 .topBtn{
 border:0;
 border-radius:9px;
-padding:9px 13px;
+padding:8px 12px;
 background:#ffd400;
 color:#111;
-font-weight:900
+font-weight:900;
+}
+
+/* GAME */
+
+#game{
+position:absolute;
+left:0;
+top:58px;
+width:100%;
+height:calc(100vh - 58px);
+overflow:hidden;
+background:radial-gradient(circle at 50% 20%,#1c3d43,#0b191e 55%,#050b0d);
+display:none;
 }
 
 #world{
@@ -223,7 +363,7 @@ position:absolute;
 left:0;
 top:0;
 width:3000px;
-height:1500px
+height:1500px;
 }
 
 .light{
@@ -233,7 +373,7 @@ width:150px;
 border-radius:20px;
 background:#dfffff;
 box-shadow:0 0 22px #bfffff;
-opacity:.65
+opacity:.65;
 }
 
 .machine{
@@ -242,7 +382,7 @@ width:70px;
 height:90px;
 border:2px solid #40575d;
 border-radius:12px;
-background:#17282d
+background:#17282d;
 }
 
 .machine:before{
@@ -254,7 +394,7 @@ border-radius:50%;
 background:#35e6b5;
 box-shadow:0 0 18px #35e6b5;
 left:24px;
-top:15px
+top:15px;
 }
 
 .machine:after{
@@ -265,7 +405,7 @@ left:12px;
 right:12px;
 bottom:14px;
 border-radius:5px;
-background:#354a50
+background:#354a50;
 }
 
 .labText{
@@ -273,7 +413,7 @@ position:absolute;
 color:#ffd400;
 font-size:18px;
 font-weight:900;
-opacity:.5
+opacity:.5;
 }
 
 .platform{
@@ -283,7 +423,7 @@ border-radius:8px;
 background:linear-gradient(#ffe044,#bd9600);
 border:2px solid #fff1a0;
 box-shadow:0 5px 0 #695500,0 0 16px rgba(255,212,0,.25);
-z-index:100
+z-index:100;
 }
 
 .finish{
@@ -291,7 +431,7 @@ position:absolute;
 z-index:500;
 width:360px;
 height:130px;
-text-align:center
+text-align:center;
 }
 
 .finishText{
@@ -300,7 +440,7 @@ font-weight:1000;
 color:#20ff70;
 text-shadow:0 0 20px #20ff70;
 margin-bottom:12px;
-white-space:nowrap
+white-space:nowrap;
 }
 
 .finishPlatform{
@@ -309,7 +449,7 @@ width:360px;
 border-radius:10px;
 background:linear-gradient(#20ff70,#079b42);
 border:3px solid #b7ffd0;
-box-shadow:0 0 30px #20ff70,0 7px 0 #075e2c
+box-shadow:0 0 30px #20ff70,0 7px 0 #075e2c;
 }
 
 #lava{
@@ -326,7 +466,7 @@ linear-gradient(180deg,#ffb000,#ff4b00 45%,#d90000);
 background-size:180px 70px,240px 80px,210px 65px,100% 100%;
 box-shadow:0 -8px 25px #ff3b00;
 animation:lavaFlow 1.1s linear infinite;
-z-index:20
+z-index:20;
 }
 
 @keyframes lavaFlow{
@@ -334,12 +474,14 @@ z-index:20
 100%{background-position:180px 0,-240px 0,210px 0,0 0}
 }
 
+/* CHARACTER */
+
 #player{
 position:absolute;
 width:48px;
 height:72px;
 z-index:1000;
-pointer-events:none
+pointer-events:none;
 }
 
 #nameTag{
@@ -353,7 +495,7 @@ background:#111b1f;
 border:1px solid #ffd400;
 font-size:12px;
 font-weight:900;
-white-space:nowrap
+white-space:nowrap;
 }
 
 #head{
@@ -363,7 +505,7 @@ height:40px;
 left:3px;
 top:0;
 border-radius:12px;
-background:#ffd0b0
+background:#ffd0b0;
 }
 
 #body{
@@ -373,7 +515,7 @@ height:30px;
 left:8px;
 top:40px;
 border-radius:7px;
-background:#4285ff
+background:#4285ff;
 }
 
 .eye{
@@ -382,7 +524,7 @@ width:5px;
 height:7px;
 background:#111;
 border-radius:50%;
-top:14px
+top:14px;
 }
 
 .eye1{left:11px}
@@ -395,7 +537,7 @@ height:5px;
 border-bottom:2px solid #111;
 border-radius:50%;
 left:15px;
-top:25px
+top:25px;
 }
 
 #crown{
@@ -403,7 +545,7 @@ position:absolute;
 z-index:5;
 left:8px;
 top:-22px;
-font-size:25px
+font-size:25px;
 }
 
 .animalEar{
@@ -414,11 +556,13 @@ height:13px;
 border-radius:50%;
 top:-3px;
 background:#95603c;
-z-index:2
+z-index:2;
 }
 
 #monkeyEarL,#chickenEarL,#zebraEarL{left:-4px}
 #monkeyEarR,#chickenEarR,#zebraEarR{right:-4px}
+
+/* COINS */
 
 .coin{
 position:absolute;
@@ -429,7 +573,7 @@ background:radial-gradient(circle,#fff5a0,#ffd400 55%,#a57c00);
 border:3px solid #fff3a0;
 box-shadow:0 0 18px #ffd400;
 z-index:300;
-animation:coinFloat .8s infinite alternate
+animation:coinFloat .8s infinite alternate;
 }
 
 .coin:after{
@@ -438,48 +582,111 @@ position:absolute;
 left:7px;
 top:2px;
 font-weight:900;
-color:#806000
+color:#806000;
 }
 
 @keyframes coinFloat{
 to{transform:translateY(-7px) rotate(8deg)}
 }
 
+/* HUD */
+
 #countdown{
 position:fixed;
-top:78px;
+top:72px;
 left:50%;
 transform:translateX(-50%);
 z-index:7000;
 font-size:42px;
 font-weight:1000;
 color:#20ff70;
-display:none
+display:none;
 }
 
 #lavaWarning{
 position:fixed;
-top:130px;
+top:120px;
 left:50%;
 transform:translateX(-50%);
 z-index:7100;
-font-size:30px;
+font-size:26px;
 font-weight:1000;
 color:#ff3030;
-display:none
+display:none;
 }
 
 #roundText{
 position:fixed;
-top:145px;
+top:135px;
 left:50%;
 transform:translateX(-50%);
 z-index:6000;
 font-size:18px;
 font-weight:900;
 color:#ffd400;
-display:none
+display:none;
 }
+
+/* MOBILE CONTROLS */
+
+#mobileControls{
+display:none;
+position:fixed;
+left:0;
+right:0;
+bottom:15px;
+z-index:9000;
+pointer-events:none;
+}
+
+.mobileRow{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:0 15px;
+}
+
+.mobileGroup{
+display:flex;
+gap:10px;
+pointer-events:auto;
+}
+
+.mobileBtn{
+width:60px;
+height:60px;
+border:2px solid #ffd400;
+border-radius:15px;
+background:rgba(10,20,23,.88);
+color:#ffd400;
+font-size:25px;
+font-weight:1000;
+touch-action:none;
+-webkit-tap-highlight-color:transparent;
+}
+
+.mobileBtn:active{
+background:#ffd400;
+color:#111;
+}
+
+/* PC = HIDDEN */
+
+@media (hover:hover) and (pointer:fine){
+#mobileControls{
+display:none !important;
+}
+}
+
+/* MOBILE = SHOWN */
+
+@media (hover:none) and (pointer:coarse){
+#mobileControls{
+display:block;
+}
+}
+
+/* MESSAGE */
 
 #message{
 display:none;
@@ -488,7 +695,8 @@ inset:0;
 z-index:8500;
 align-items:center;
 justify-content:center;
-background:rgba(0,0,0,.8)
+background:rgba(0,0,0,.8);
+padding:20px;
 }
 
 .messageBox{
@@ -496,7 +704,8 @@ padding:30px;
 border:2px solid #ffd400;
 border-radius:20px;
 background:#17252a;
-text-align:center
+text-align:center;
+max-width:90%;
 }
 
 .messageBox button{
@@ -504,43 +713,122 @@ border:0;
 padding:12px 25px;
 border-radius:9px;
 background:#ffd400;
-font-weight:900
+font-weight:900;
 }
 
+/* RESPONSIVE */
+
 @media(max-width:799px){
-.skinGrid{grid-template-columns:repeat(3,1fr)}
-#topbar{height:52px}
-#game{top:52px;height:calc(100vh - 52px)}
+
+.skinGrid{
+grid-template-columns:repeat(3,1fr);
+}
+
+.menuLogo{
+font-size:42px;
+}
+
+.menuSub{
+font-size:15px;
+}
+
+#topbar{
+height:52px;
+}
+
+#game{
+top:52px;
+height:calc(100vh - 52px);
+}
+
+.finishText{
+font-size:30px;
+}
+
+.panel{
+padding:18px;
+}
+
+}
+
+@media(max-width:500px){
+
+#characterScreen,
+#howScreen{
+padding:8px;
+}
+
+.panel{
+max-height:98vh;
+padding:14px;
+}
+
+.panel h1{
+font-size:22px;
+}
+
+.skinEmoji{
+font-size:30px;
+}
+
+.skin{
+padding:8px 3px;
+}
+
+.skinName{
+font-size:12px;
+}
+
+.menuBox{
+padding:25px 15px;
+}
+
+.menuLogo{
+font-size:34px;
+}
+
+.mobileBtn{
+width:55px;
+height:55px;
+}
+
 }
 </style>
 </head>
 
 <body>
 
-<!-- ENTER GAME FIRST -->
+<!-- MAIN MENU -->
+
 <div id="mainMenu">
 <div class="menuBox">
 
 <div class="menuLogo">🧪 SleepyLabs</div>
-<div class="menuSub">Escape the laboratory before the lava gets you 🌋</div>
 
-<div class="menuCoins">🪙 <span id="mainCoinText">0</span> Coins</div>
+<div class="menuSub">
+Escape the laboratory before the lava gets you 🌋
+</div>
+
+<div class="menuCoins">
+🪙 <span id="mainCoinText">0</span> Coins
+</div>
 
 <button class="menuButton" onclick="openCharacterScreen()">
 🚀 ENTER GAME
 </button>
 
-<button class="menuButton secondary" onclick="openHowToPlay()">
-📖 HOW TO PLAY
-</button>
-
-<div class="credit">Made By SleepyBlocks</div>
+<div class="credit">
+Made By SleepyBlocks
+</div>
 
 </div>
 </div>
 
-<!-- CHARACTER -->
+
+<!-- CHARACTER SCREEN -->
+
 <div id="characterScreen">
+
 <div class="panel">
 
 <h1>🎭 CHOOSE YOUR CHARACTER</h1>
@@ -549,35 +837,63 @@ font-weight:900
 🪙 <span id="skinCoinText">0</span> Coins
 </div>
 
-<input id="nameInput" maxlength="16" placeholder="Enter your name">
+<div class="playerIDBox">
+🆔 Your Player ID:
+<b id="playerIDText">Loading...</b>
+</div>
+
+<button class="copyID" onclick="copyPlayerID()">
+📋 COPY PLAYER ID
+</button>
+
+<input
+id="nameInput"
+maxlength="16"
+placeholder="Enter your name"
+>
 
 <div class="skinGrid">
 
-<button class="skin selected" data-price="0" data-skin="boy" onclick="selectSkin(this)">
+<button class="skin selected"
+data-price="0"
+data-skin="boy"
+onclick="selectSkin(this)">
 <div class="skinEmoji">👦</div>
 <div class="skinName">Boy</div>
 <div class="skinPrice">FREE</div>
 </button>
 
-<button class="skin" data-price="0" data-skin="girl" onclick="selectSkin(this)">
+<button class="skin"
+data-price="0"
+data-skin="girl"
+onclick="selectSkin(this)">
 <div class="skinEmoji">👧</div>
 <div class="skinName">Girl</div>
 <div class="skinPrice">FREE</div>
 </button>
 
-<button class="skin" data-price="15" data-skin="monkey" onclick="selectSkin(this)">
+<button class="skin"
+data-price="15"
+data-skin="monkey"
+onclick="selectSkin(this)">
 <div class="skinEmoji">🐵</div>
 <div class="skinName">Monkey</div>
 <div class="skinPrice">15 🪙</div>
 </button>
 
-<button class="skin" data-price="20" data-skin="chicken" onclick="selectSkin(this)">
+<button class="skin"
+data-price="20"
+data-skin="chicken"
+onclick="selectSkin(this)">
 <div class="skinEmoji">🐔</div>
 <div class="skinName">Chicken</div>
 <div class="skinPrice">20 🪙</div>
 </button>
 
-<button class="skin" data-price="25" data-skin="zebra" onclick="selectSkin(this)">
+<button class="skin"
+data-price="25"
+data-skin="zebra"
+onclick="selectSkin(this)">
 <div class="skinEmoji">🦓</div>
 <div class="skinName">Zebra</div>
 <div class="skinPrice">25 🪙</div>
@@ -587,42 +903,141 @@ font-weight:900
 
 <div id="skinError"></div>
 
-<button class="menuButton" onclick="openHowToPlayFromCharacter()">
+<button class="menuButton" onclick="enterGame()">
+🚀 PLAY
+</button>
+
+<button class="menuButton secondary" onclick="openHowToPlayFromCharacter()">
 📖 HOW TO PLAY
+</button>
+
+<button id="adminButton" onclick="openAdminLogin()">
+AP
 </button>
 
 </div>
 </div>
 
+
 <!-- HOW TO PLAY -->
+
 <div id="howScreen">
+
 <div class="panel">
 
 <h1>📖 HOW TO PLAY</h1>
 
 <ul id="howList">
+
 <li>🎮 <b>Move:</b> Use A/D or the arrow keys.</li>
 <li>⬆️ <b>Jump:</b> Press W, Space, or Up Arrow.</li>
+<li>📱 <b>Mobile:</b> Use the buttons on screen.</li>
 <li>🪙 <b>Collect:</b> Grab coins around the laboratory.</li>
 <li>🌋 <b>Watch out:</b> The lava rises while you play.</li>
 <li>🏁 <b>Goal:</b> Reach the green finish platform.</li>
 <li>🚀 <b>Stages:</b> Complete all 3 stages to escape.</li>
+
 </ul>
 
 <button class="menuButton" onclick="enterGame()">
 🚀 PLAY
 </button>
 
+<button class="menuButton secondary" onclick="backToCharacter()">
+⬅️ BACK
+</button>
+
 </div>
 </div>
 
-<!-- GAME TOPBAR -->
+
+<!-- ADMIN -->
+
+<div id="adminScreen">
+
+<div class="adminPanel">
+
+<h1>⚙ ADMIN PANEL</h1>
+
+<div class="adminSmall">
+SleepyLabs Administration
+</div>
+
+<div id="adminLoginArea">
+
+<input
+id="adminPassword"
+class="adminInput"
+type="password"
+placeholder="Admin password"
+>
+
+<button class="adminAction" onclick="checkAdminPassword()">
+🔐 LOGIN
+</button>
+
+<button class="adminAction adminClose" onclick="closeAdmin()">
+CANCEL
+</button>
+
+</div>
+
+
+<div id="adminControls" style="display:none">
+
+<div class="adminSmall">
+Logged in as <b style="color:#ffd400">SleepyBlocks</b>
+</div>
+
+<input
+id="targetPlayer"
+class="adminInput"
+placeholder="Target Player ID"
+>
+
+<input
+id="coinAmount"
+class="adminInput"
+type="number"
+min="1"
+placeholder="Coins to give"
+>
+
+<button class="adminAction" onclick="giveCoins()">
+🪙 GIVE COINS
+</button>
+
+<div id="adminResult"></div>
+
+<div class="adminPlayerList" id="playerList">
+No other players saved on this device.
+</div>
+
+<button class="adminAction adminClose" onclick="closeAdmin()">
+CLOSE ADMIN
+</button>
+
+</div>
+
+</div>
+</div>
+
+
+<!-- TOP BAR -->
+
 <div id="topbar">
-<div class="logo">🧪 SleepyLabs</div>
+
+<div class="logo">
+🧪 SleepyLabs
+</div>
 
 <div class="stats">
 🪙 <span id="coinText">0</span>
-<button class="topBtn" onclick="restart()">🔄</button>
+
+<button class="topBtn" onclick="restart()">
+🔄
+</button>
+
 </div>
 </div>
 
@@ -630,7 +1045,11 @@ font-weight:900
 <div id="lavaWarning">🌋 LAVA IS RISING!</div>
 <div id="roundText">STAGE 1</div>
 
+
+<!-- GAME -->
+
 <div id="game">
+
 <div id="world">
 
 <div class="light" style="left:100px;top:80px"></div>
@@ -644,11 +1063,20 @@ font-weight:900
 <div class="machine" style="left:1200px;top:100px"></div>
 <div class="machine" style="left:1750px;top:140px"></div>
 
-<div class="labText" style="left:50px;top:120px">⚗ LAB ZONE 01</div>
-<div class="labText" style="left:900px;top:120px">🧬 EXPERIMENT AREA</div>
-<div class="labText" style="left:1750px;top:110px">☢️ DANGER ZONE</div>
+<div class="labText" style="left:50px;top:120px">
+⚗ LAB ZONE 01
+</div>
+
+<div class="labText" style="left:900px;top:120px">
+🧬 EXPERIMENT AREA
+</div>
+
+<div class="labText" style="left:1750px;top:110px">
+☢️ DANGER ZONE
+</div>
 
 <!-- STAGE 1 -->
+
 <div class="platform r1" style="left:80px;bottom:300px;width:250px"></div>
 <div class="platform r1" style="left:400px;bottom:300px;width:120px"></div>
 <div class="platform r1" style="left:590px;bottom:430px;width:110px"></div>
@@ -672,6 +1100,7 @@ font-weight:900
 </div>
 
 <!-- STAGE 2 -->
+
 <div class="platform r2" style="display:none;left:80px;bottom:300px;width:220px"></div>
 <div class="platform r2" style="display:none;left:400px;bottom:330px;width:95px"></div>
 <div class="platform r2" style="display:none;left:570px;bottom:390px;width:85px"></div>
@@ -696,6 +1125,7 @@ font-weight:900
 </div>
 
 <!-- STAGE 3 -->
+
 <div class="platform r3" style="display:none;left:80px;bottom:300px;width:210px"></div>
 <div class="platform r3" style="display:none;left:390px;bottom:330px;width:90px"></div>
 <div class="platform r3" style="display:none;left:550px;bottom:410px;width:82px"></div>
@@ -721,93 +1151,292 @@ font-weight:900
 
 <div id="lava"></div>
 
+<!-- PLAYER -->
+
 <div id="player">
+
 <div id="nameTag">Player</div>
 <div id="crown">👑</div>
 
 <div id="head">
+
 <div id="monkeyEarL" class="animalEar"></div>
 <div id="monkeyEarR" class="animalEar"></div>
+
 <div id="chickenEarL" class="animalEar"></div>
 <div id="chickenEarR" class="animalEar"></div>
+
 <div id="zebraEarL" class="animalEar"></div>
 <div id="zebraEarR" class="animalEar"></div>
+
 <div class="eye eye1"></div>
 <div class="eye eye2"></div>
 <div class="mouth"></div>
+
 </div>
 
 <div id="body"></div>
+
 </div>
 
 </div>
 </div>
+
+
+<!-- MOBILE -->
+
+<div id="mobileControls">
+
+<div class="mobileRow">
+
+<div class="mobileGroup">
+
+<button class="mobileBtn" id="mobileLeft">
+◀
+</button>
+
+<button class="mobileBtn" id="mobileRight">
+▶
+</button>
+
+</div>
+
+<div class="mobileGroup">
+
+<button class="mobileBtn" id="mobileJump">
+⬆
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+
+<!-- MESSAGE -->
 
 <div id="message">
+
 <div class="messageBox">
+
 <h1 id="messageTitle">💀 YOU LOST!</h1>
+
 <p id="messageText"></p>
-<button id="messageButton" onclick="messageAction()">🔄 STAGE 1</button>
-</div>
+
+<button id="messageButton" onclick="messageAction()">
+🔄 STAGE 1
+</button>
+
 </div>
 
+</div>
+
+
 <script>
+
+/* PLAYER ID */
+
+const ADMIN_ID="SleepyBlocks";
+const ADMIN_PASSWORD="sleepylabs";
+
+function createPlayerID(){
+
+let saved=localStorage.getItem("sleepyLabsPlayerID");
+
+if(saved)return saved;
+
+const randomPart=
+Math.random().toString(36).substring(2,8).toUpperCase();
+
+const timePart=
+Date.now().toString(36).toUpperCase();
+
+const id="SL-"+timePart+"-"+randomPart;
+
+localStorage.setItem("sleepyLabsPlayerID",id);
+
+return id;
+}
+
+let playerID=createPlayerID();
+
+
+/* COPY ID */
+
+function copyPlayerID(){
+
+const text=playerID;
+
+if(navigator.clipboard){
+
+navigator.clipboard.writeText(text)
+.then(showCopyMessage)
+.catch(()=>fallbackCopy(text));
+
+}else{
+
+fallbackCopy(text);
+
+}
+
+}
+
+function fallbackCopy(text){
+
+const temp=document.createElement("textarea");
+
+temp.value=text;
+
+document.body.appendChild(temp);
+
+temp.select();
+
+document.execCommand("copy");
+
+temp.remove();
+
+showCopyMessage();
+
+}
+
+function showCopyMessage(){
+
+const error=document.getElementById("skinError");
+const old=error.textContent;
+
+error.textContent="✅ Player ID copied!";
+
+setTimeout(()=>{
+error.textContent=old;
+},1800);
+
+}
+
+
+/* GAME VARIABLES */
+
 const world=document.getElementById("world");
 const player=document.getElementById("player");
 const lava=document.getElementById("lava");
 
-let platforms=[],coins=[];
-let x=0,y=0,vx=0,vy=0;
-let left=false,right=false,grounded=false;
-let started=false,dead=false;
-let score=Number(localStorage.getItem("sleepyLabsCoins")||0);
+let platforms=[];
+let coins=[];
+
+let x=0;
+let y=0;
+let vx=0;
+let vy=0;
+
+let left=false;
+let right=false;
+let grounded=false;
+
+let started=false;
+let dead=false;
+
+let score=Number(
+localStorage.getItem("sleepyLabsCoins_"+playerID)||0
+);
+
 let selectedSkin="boy";
 let playerName="Player";
+
 let round=1;
 let timer=15;
+
 let timerInterval=null;
 let lavaAnimation=null;
 
+
+/* COINS */
+
 function updateCoins(){
-localStorage.setItem("sleepyLabsCoins",String(score));
+
+localStorage.setItem(
+"sleepyLabsCoins_"+playerID,
+String(score)
+);
+
 document.getElementById("coinText").textContent=score;
 document.getElementById("mainCoinText").textContent=score;
 document.getElementById("skinCoinText").textContent=score;
+
 }
 
+
+/* CHARACTER PAGE */
+
 function openCharacterScreen(){
+
 document.getElementById("mainMenu").style.display="none";
 document.getElementById("howScreen").style.display="none";
 document.getElementById("characterScreen").style.display="flex";
+
 updateCoins();
+
 }
 
-function openHowToPlay(){
-document.getElementById("mainMenu").style.display="none";
-document.getElementById("characterScreen").style.display="none";
-document.getElementById("howScreen").style.display="flex";
+function backToCharacter(){
+
+document.getElementById("howScreen").style.display="none";
+document.getElementById("characterScreen").style.display="flex";
+
 }
 
 function openHowToPlayFromCharacter(){
-const name=document.getElementById("nameInput").value.trim();
+
+const name=
+document.getElementById("nameInput").value.trim();
 
 if(!name){
-document.getElementById("skinError").textContent="Enter your name first!";
+
+document.getElementById("skinError").textContent=
+"Enter your name first!";
+
 return;
+
 }
 
 playerName=name;
+
 document.getElementById("skinError").textContent="";
+
 document.getElementById("characterScreen").style.display="none";
 document.getElementById("howScreen").style.display="flex";
+
 }
 
+
+/* FULLSCREEN */
+
+async function lockFullscreen(){
+
+try{
+
+if(document.documentElement.requestFullscreen){
+
+await document.documentElement.requestFullscreen();
+
+}
+
+}catch(e){}
+
+}
+
+
+/* START GAME */
+
 function enterGame(){
+
+lockFullscreen();
+
 document.getElementById("howScreen").style.display="none";
 document.getElementById("characterScreen").style.display="none";
 document.getElementById("mainMenu").style.display="none";
 
-playerName=document.getElementById("nameInput").value.trim()||playerName;
+playerName=
+document.getElementById("nameInput").value.trim()||playerName;
 
 document.getElementById("nameTag").textContent=playerName;
 
@@ -817,132 +1446,239 @@ document.getElementById("topbar").style.display="flex";
 document.getElementById("roundText").style.display="block";
 document.getElementById("game").style.display="block";
 
+if(
+window.matchMedia("(hover:none) and (pointer:coarse)").matches
+){
+
+document.getElementById("mobileControls")
+.style.display="block";
+
+}else{
+
+document.getElementById("mobileControls")
+.style.display="none";
+
+}
+
 started=true;
 dead=false;
 round=1;
 
 showRound(1);
+resetStageCoins(1);
 spawn();
 startCountdown(15);
+
 requestAnimationFrame(loop);
+
 }
 
+
+/* SKINS */
+
 function selectSkin(button){
-document.querySelectorAll(".skin").forEach(s=>s.classList.remove("selected"));
+
+const price=Number(button.dataset.price);
+
+if(price>0 && score<price){
+
+document.getElementById("skinError").textContent=
+"❌ You need "+price+" coins!";
+
+return;
+
+}
+
+document
+.querySelectorAll(".skin")
+.forEach(s=>s.classList.remove("selected"));
+
 button.classList.add("selected");
+
 selectedSkin=button.dataset.skin;
+
+document.getElementById("skinError").textContent="";
+
 }
 
 function applySkin(){
+
 const head=document.getElementById("head");
 const body=document.getElementById("body");
 const crown=document.getElementById("crown");
 
-document.querySelectorAll(".animalEar").forEach(e=>e.style.display="none");
+document
+.querySelectorAll(".animalEar")
+.forEach(e=>e.style.display="none");
 
 if(selectedSkin==="boy"){
+
 head.style.background="#ffd0b0";
 body.style.background="#4285ff";
 crown.style.display="block";
+
 }
 
 if(selectedSkin==="girl"){
+
 head.style.background="#ffd0b0";
 body.style.background="#ff69b4";
 crown.style.display="block";
+
 }
 
 if(selectedSkin==="monkey"){
+
 head.style.background="#95603c";
 body.style.background="#714425";
 crown.style.display="none";
+
 document.getElementById("monkeyEarL").style.display="block";
 document.getElementById("monkeyEarR").style.display="block";
+
 }
 
 if(selectedSkin==="chicken"){
+
 head.style.background="#fff0a0";
 body.style.background="#e4c52f";
 crown.style.display="none";
+
 document.getElementById("chickenEarL").style.display="block";
 document.getElementById("chickenEarR").style.display="block";
+
 }
 
 if(selectedSkin==="zebra"){
+
 head.style.background="#eee";
 body.style.background="#222";
 crown.style.display="none";
+
 document.getElementById("zebraEarL").style.display="block";
 document.getElementById("zebraEarR").style.display="block";
+
 }
+
 }
+
+
+/* STAGES */
 
 function updateObjects(){
-let selector=round===1?".platform.r1":round===2?".platform.r2":".platform.r3";
-platforms=[...document.querySelectorAll(selector)];
 
-coins=[...document.querySelectorAll(
-round===1?".coin.r1":round===2?".coin.r2":".coin.r3"
-)];
+let selector=
+round===1?".platform.r1":
+round===2?".platform.r2":
+".platform.r3";
+
+platforms=[
+...document.querySelectorAll(selector)
+];
+
+coins=[
+...document.querySelectorAll(
+round===1?".coin.r1":
+round===2?".coin.r2":
+".coin.r3"
+)
+];
+
 }
 
 function spawn(){
+
 updateObjects();
 
 const first=platforms[0];
-const platformBottom=world.offsetHeight-first.offsetTop;
+
+const platformBottom=
+world.offsetHeight-first.offsetTop;
 
 x=first.offsetLeft+30;
 y=platformBottom;
+
 vx=0;
 vy=0;
 grounded=true;
 
 draw();
 camera();
+
 }
 
 function draw(){
+
 player.style.left=x+"px";
 player.style.bottom=y+"px";
+
 }
 
 function camera(){
+
 const screenWidth=window.innerWidth;
 
 let target=x-screenWidth/2+24;
-const maxCamera=Math.max(0,world.offsetWidth-screenWidth);
 
-target=Math.max(0,Math.min(target,maxCamera));
+const maxCamera=
+Math.max(0,world.offsetWidth-screenWidth);
 
-world.style.transform=`translateX(${-target}px)`;
+target=
+Math.max(0,Math.min(target,maxCamera));
+
+world.style.transform=
+`translateX(${-target}px)`;
+
 }
 
 function showRound(number){
-document.querySelectorAll(".r1").forEach(el=>el.style.display=number===1?"block":"none");
-document.querySelectorAll(".r2").forEach(el=>el.style.display=number===2?"block":"none");
-document.querySelectorAll(".r3").forEach(el=>el.style.display=number===3?"block":"none");
 
-document.querySelectorAll(".finish").forEach(el=>el.style.display="none");
-document.querySelector(".f"+number).style.display="block";
+document.querySelectorAll(".r1")
+.forEach(el=>el.style.display=number===1?"block":"none");
 
-document.getElementById("roundText").textContent="STAGE "+number;
+document.querySelectorAll(".r2")
+.forEach(el=>el.style.display=number===2?"block":"none");
+
+document.querySelectorAll(".r3")
+.forEach(el=>el.style.display=number===3?"block":"none");
+
+document.querySelectorAll(".finish")
+.forEach(el=>el.style.display="none");
+
+document.querySelector(".f"+number)
+.style.display="block";
+
+document.getElementById("roundText")
+.textContent="STAGE "+number;
+
 }
 
 function resetStageCoins(number){
-const selector=number===1?".coin.r1":number===2?".coin.r2":".coin.r3";
 
-document.querySelectorAll(selector).forEach(coin=>{
+const selector=
+number===1?".coin.r1":
+number===2?".coin.r2":
+".coin.r3";
+
+document.querySelectorAll(selector)
+.forEach(coin=>{
 coin.style.display="block";
 });
+
 }
 
+
+/* LAVA */
+
 function startCountdown(seconds){
+
 clearInterval(timerInterval);
 
-if(lavaAnimation)cancelAnimationFrame(lavaAnimation);
+if(lavaAnimation)
+cancelAnimationFrame(lavaAnimation);
 
 timer=seconds;
+
 lava.style.height="55px";
 
 const countdown=document.getElementById("countdown");
@@ -950,52 +1686,82 @@ const warning=document.getElementById("lavaWarning");
 
 countdown.style.display="block";
 warning.style.display="block";
+
+countdown.style.color="#20ff70";
 countdown.textContent=timer;
 
 let start=performance.now();
 
 function rise(now){
+
 if(dead)return;
 
-const progress=Math.min(1,(now-start)/(seconds*1000));
-lava.style.height=(55+progress*900)+"px";
+const progress=
+Math.min(1,(now-start)/(seconds*1000));
 
-if(progress<1)lavaAnimation=requestAnimationFrame(rise);
+lava.style.height=
+(55+progress*900)+"px";
+
+if(progress<1){
+
+lavaAnimation=
+requestAnimationFrame(rise);
+
+}
+
 }
 
 lavaAnimation=requestAnimationFrame(rise);
 
 timerInterval=setInterval(()=>{
+
 timer--;
+
 countdown.textContent=Math.max(0,timer);
 
-if(timer<=5)countdown.style.color="#ff3030";
+if(timer<=5)
+countdown.style.color="#ff3030";
 
 if(timer<=0){
+
 clearInterval(timerInterval);
+
 countdown.style.display="none";
 warning.style.display="none";
+
 die("THE VOLCANO ERUPTED!");
-}
-},1000);
+
 }
 
+},1000);
+
+}
+
+
+/* COLLISION */
+
 function playerRect(){
+
 return{
 left:x,
 right:x+48,
 bottom:y,
 top:y+72
 };
+
 }
 
 function platformCollision(){
+
 const p=playerRect();
 
 for(const platform of platforms){
+
 const leftEdge=platform.offsetLeft;
 const rightEdge=leftEdge+platform.offsetWidth;
-const platformBottom=world.offsetHeight-platform.offsetTop;
+
+const platformBottom=
+world.offsetHeight-platform.offsetTop;
 
 if(
 vy<=0 &&
@@ -1004,23 +1770,39 @@ p.left<rightEdge &&
 p.bottom<=platformBottom &&
 p.bottom-vy>=platformBottom
 ){
+
 y=platformBottom;
 vy=0;
 grounded=true;
-}
-}
+
 }
 
+}
+
+}
+
+
+/* COLLECT COINS */
+
 function collectCoins(){
+
 const p=playerRect();
 
 coins.forEach(coin=>{
-if(coin.style.display==="none")return;
+
+if(coin.style.display==="none")
+return;
 
 const leftEdge=coin.offsetLeft;
 const rightEdge=leftEdge+coin.offsetWidth;
-const bottom=world.offsetHeight-coin.offsetTop-coin.offsetHeight;
-const top=world.offsetHeight-coin.offsetTop;
+
+const bottom=
+world.offsetHeight-
+coin.offsetTop-
+coin.offsetHeight;
+
+const top=
+world.offsetHeight-coin.offsetTop;
 
 if(
 p.right>leftEdge &&
@@ -1028,15 +1810,26 @@ p.left<rightEdge &&
 p.top>bottom &&
 p.bottom<top
 ){
+
 coin.style.display="none";
+
 score++;
+
 updateCoins();
-}
-});
+
 }
 
+});
+
+}
+
+
+/* LOOP */
+
 function loop(){
-if(!started||dead)return;
+
+if(!started||dead)
+return;
 
 const speed=.95;
 
@@ -1044,6 +1837,7 @@ if(left)vx-=speed;
 if(right)vx+=speed;
 
 vx*=.82;
+
 x+=vx;
 
 vy-=.75;
@@ -1054,13 +1848,19 @@ grounded=false;
 platformCollision();
 
 if(x<0)x=0;
-if(x>world.offsetWidth-48)x=world.offsetWidth-48;
 
-const lavaHeight=parseInt(getComputedStyle(lava).height);
+if(x>world.offsetWidth-48)
+x=world.offsetWidth-48;
+
+const lavaHeight=
+parseInt(getComputedStyle(lava).height);
 
 if(y<=lavaHeight){
+
 die("THE LAVA GOT YOU!");
+
 return;
+
 }
 
 collectCoins();
@@ -1068,18 +1868,24 @@ collectCoins();
 let finishX,finishY;
 
 if(round===1){
+
 finishX=1880;
 finishY=820;
+
 }
 
 if(round===2){
+
 finishX=2100;
 finishY=750;
+
 }
 
 if(round===3){
+
 finishX=2320;
 finishY=820;
+
 }
 
 if(
@@ -1087,26 +1893,39 @@ x+48>finishX &&
 x<finishX+360 &&
 y>finishY
 ){
+
 finishRound();
+
 return;
+
 }
 
 draw();
 camera();
+
 requestAnimationFrame(loop);
+
 }
 
 function jump(){
-if(!grounded)return;
+
+if(!grounded)
+return;
 
 vy=15;
 grounded=false;
+
 }
 
+
+/* FINISH */
+
 function finishRound(){
+
 clearInterval(timerInterval);
 
-if(lavaAnimation)cancelAnimationFrame(lavaAnimation);
+if(lavaAnimation)
+cancelAnimationFrame(lavaAnimation);
 
 document.getElementById("countdown").style.display="none";
 document.getElementById("lavaWarning").style.display="none";
@@ -1114,63 +1933,149 @@ document.getElementById("lavaWarning").style.display="none";
 dead=true;
 
 if(round===1){
-document.getElementById("messageTitle").textContent="🚀 STAGE 1 COMPLETE!";
-document.getElementById("messageText").textContent="Ready for Stage 2?";
-document.getElementById("messageButton").textContent="🚀 STAGE 2";
+
+document.getElementById("messageTitle")
+.textContent="🚀 STAGE 1 COMPLETE!";
+
+document.getElementById("messageText")
+.textContent="Ready for Stage 2?";
+
+document.getElementById("messageButton")
+.textContent="🚀 STAGE 2";
+
 }
+
 else if(round===2){
-document.getElementById("messageTitle").textContent="🔥 STAGE 2 COMPLETE!";
-document.getElementById("messageText").textContent="Ready for Stage 3?";
-document.getElementById("messageButton").textContent="🚀 STAGE 3";
+
+document.getElementById("messageTitle")
+.textContent="🔥 STAGE 2 COMPLETE!";
+
+document.getElementById("messageText")
+.textContent="Ready for Stage 3?";
+
+document.getElementById("messageButton")
+.textContent="🚀 STAGE 3";
+
 }
+
 else{
-document.getElementById("messageTitle").textContent="🏆 YOU WIN!";
-document.getElementById("messageText").textContent="You escaped SleepyLabs!";
-document.getElementById("messageButton").textContent="🔄 PLAY AGAIN";
+
+document.getElementById("messageTitle")
+.textContent="🏆 YOU WIN!";
+
+document.getElementById("messageText")
+.textContent="You escaped SleepyLabs!";
+
+document.getElementById("messageButton")
+.textContent="🏠 CHARACTER PAGE";
+
 }
 
 document.getElementById("message").style.display="flex";
+
 }
 
+
+/* MESSAGE */
+
 function messageAction(){
+
 if(round<3){
+
 round++;
 dead=false;
+
 document.getElementById("message").style.display="none";
+
 resetStageCoins(round);
 showRound(round);
 spawn();
 startCountdown(15);
+
 requestAnimationFrame(loop);
+
 }else{
-restart();
-}
+
+returnToCharacterPage();
+
 }
 
+}
+
+
+/* RETURN */
+
+function returnToCharacterPage(){
+
+clearInterval(timerInterval);
+
+if(lavaAnimation)
+cancelAnimationFrame(lavaAnimation);
+
+started=false;
+dead=false;
+
+document.getElementById("message").style.display="none";
+document.getElementById("game").style.display="none";
+document.getElementById("topbar").style.display="none";
+document.getElementById("roundText").style.display="none";
+document.getElementById("countdown").style.display="none";
+document.getElementById("lavaWarning").style.display="none";
+document.getElementById("mobileControls").style.display="none";
+
+round=1;
+
+showRound(1);
+
+document.getElementById("characterScreen").style.display="flex";
+
+updateCoins();
+
+}
+
+
+/* DEATH */
+
 function die(reason){
-if(dead)return;
+
+if(dead)
+return;
 
 dead=true;
 
 clearInterval(timerInterval);
 
-if(lavaAnimation)cancelAnimationFrame(lavaAnimation);
+if(lavaAnimation)
+cancelAnimationFrame(lavaAnimation);
 
 document.getElementById("countdown").style.display="none";
 document.getElementById("lavaWarning").style.display="none";
 
-score=0;
 updateCoins();
 
 setTimeout(()=>{
-document.getElementById("messageTitle").textContent="💀 YOU LOST!";
-document.getElementById("messageText").textContent=reason+" You respawn at Stage 1.";
-document.getElementById("messageButton").textContent="🔄 STAGE 1";
+
+document.getElementById("messageTitle")
+.textContent="💀 YOU LOST!";
+
+document.getElementById("messageText")
+.textContent=
+reason+" You respawn at Stage 1.";
+
+document.getElementById("messageButton")
+.textContent="🔄 STAGE 1";
+
 document.getElementById("message").style.display="flex";
+
 },200);
+
 }
 
+
+/* RESTART */
+
 function restart(){
+
 document.getElementById("message").style.display="none";
 
 round=1;
@@ -1185,29 +2090,358 @@ lava.style.height="55px";
 
 spawn();
 startCountdown(15);
+
 requestAnimationFrame(loop);
+
 }
+
+
+/* ADMIN LOGIN */
+
+function openAdminLogin(){
+
+document.getElementById("adminScreen").style.display="flex";
+
+document.getElementById("adminLoginArea").style.display="block";
+
+document.getElementById("adminControls").style.display="none";
+
+document.getElementById("adminPassword").value="";
+
+document.getElementById("adminResult").textContent="";
+
+setTimeout(()=>{
+document.getElementById("adminPassword").focus();
+},100);
+
+}
+
+
+/* ADMIN CLOSE */
+
+function closeAdmin(){
+
+document.getElementById("adminScreen").style.display="none";
+
+}
+
+
+/* CHECK PASSWORD */
+
+function checkAdminPassword(){
+
+const entered=
+document.getElementById("adminPassword")
+.value
+.trim()
+.toLowerCase();
+
+if(entered===ADMIN_PASSWORD.toLowerCase()){
+
+document.getElementById("adminLoginArea")
+.style.display="none";
+
+document.getElementById("adminControls")
+.style.display="block";
+
+document.getElementById("adminResult")
+.textContent=
+"✅ Admin access granted.";
+
+refreshPlayerList();
+
+}else{
+
+document.getElementById("adminResult")
+.textContent=
+"❌ Wrong password.";
+
+}
+
+}
+
+
+/* ADMIN COINS */
+
+function getPlayerCoins(id){
+
+return Number(
+localStorage.getItem("sleepyLabsCoins_"+id)||0
+);
+
+}
+
+function setPlayerCoins(id,amount){
+
+localStorage.setItem(
+"sleepyLabsCoins_"+id,
+String(Math.max(0,amount))
+);
+
+}
+
+function giveCoins(){
+
+const target=
+document.getElementById("targetPlayer")
+.value.trim();
+
+const amount=
+Number(
+document.getElementById("coinAmount").value
+);
+
+if(!target){
+
+document.getElementById("adminResult")
+.textContent=
+"❌ Enter a Player ID.";
+
+return;
+
+}
+
+if(
+!Number.isFinite(amount)||
+amount<=0
+){
+
+document.getElementById("adminResult")
+.textContent=
+"❌ Enter a valid coin amount.";
+
+return;
+
+}
+
+const oldCoins=getPlayerCoins(target);
+
+const newCoins=
+oldCoins+Math.floor(amount);
+
+setPlayerCoins(target,newCoins);
+
+document.getElementById("adminResult")
+.textContent=
+"✅ Gave "+
+Math.floor(amount)+
+" coins to "+
+target+
+". New balance: "+
+newCoins+
+" 🪙";
+
+refreshPlayerList();
+
+}
+
+
+/* PLAYER LIST */
+
+function refreshPlayerList(){
+
+const list=
+document.getElementById("playerList");
+
+const ids=[];
+
+for(
+let i=0;
+i<localStorage.length;
+i++
+){
+
+const key=localStorage.key(i);
+
+if(
+key &&
+key.startsWith("sleepyLabsCoins_")
+){
+
+ids.push(
+key.replace("sleepyLabsCoins_","")
+);
+
+}
+
+}
+
+if(!ids.length){
+
+list.textContent=
+"No other players saved on this device.";
+
+return;
+
+}
+
+list.innerHTML=
+"<b style='color:#ffd400'>Saved Player IDs:</b><br><br>"+
+ids.map(id=>
+id+" — "+getPlayerCoins(id)+" 🪙"
+).join("<br>");
+
+}
+
+
+/* KEYBOARD */
 
 document.addEventListener("keydown",e=>{
+
 const key=e.key.toLowerCase();
 
-if(key==="a"||key==="arrowleft")left=true;
-if(key==="d"||key==="arrowright")right=true;
+if(
+key==="a"||
+key==="arrowleft"
+)
+left=true;
 
-if(key==="w"||key==="arrowup"||key===" "){
+if(
+key==="d"||
+key==="arrowright"
+)
+right=true;
+
+if(
+key==="w"||
+key==="arrowup"||
+key===" "
+){
+
 e.preventDefault();
 jump();
+
 }
+
 });
 
 document.addEventListener("keyup",e=>{
+
 const key=e.key.toLowerCase();
 
-if(key==="a"||key==="arrowleft")left=false;
-if(key==="d"||key==="arrowright")right=false;
+if(
+key==="a"||
+key==="arrowleft"
+)
+left=false;
+
+if(
+key==="d"||
+key==="arrowright"
+)
+right=false;
+
 });
 
+
+/* MOBILE CONTROLS */
+
+function setupMobileButton(id,down,up){
+
+const button=document.getElementById(id);
+
+button.addEventListener(
+"touchstart",
+e=>{
+e.preventDefault();
+down();
+},
+{passive:false}
+);
+
+button.addEventListener(
+"touchend",
+e=>{
+e.preventDefault();
+up();
+},
+{passive:false}
+);
+
+button.addEventListener(
+"touchcancel",
+e=>{
+e.preventDefault();
+up();
+},
+{passive:false}
+);
+
+button.addEventListener(
+"mousedown",
+e=>{
+e.preventDefault();
+down();
+}
+);
+
+button.addEventListener(
+"mouseup",
+e=>{
+e.preventDefault();
+up();
+}
+);
+
+button.addEventListener(
+"mouseleave",
+e=>{
+up();
+}
+);
+
+}
+
+setupMobileButton(
+"mobileLeft",
+()=>left=true,
+()=>left=false
+);
+
+setupMobileButton(
+"mobileRight",
+()=>right=true,
+()=>right=false
+);
+
+const jumpButton=
+document.getElementById("mobileJump");
+
+jumpButton.addEventListener(
+"touchstart",
+e=>{
+e.preventDefault();
+jump();
+},
+{passive:false}
+);
+
+jumpButton.addEventListener(
+"mousedown",
+e=>{
+e.preventDefault();
+jump();
+}
+);
+
+
+/* RESIZE */
+
+window.addEventListener("resize",()=>{
+
+if(started)
+camera();
+
+});
+
+
+/* STARTUP */
+
+document.getElementById("playerIDText")
+.textContent=playerID;
+
 updateCoins();
+
 </script>
 
 </body>
